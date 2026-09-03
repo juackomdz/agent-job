@@ -31,5 +31,8 @@ function handleSubmit() {
       <input v-model="input" placeholder="Type a message..." :disabled="isLoading" />
       <button type="submit" :disabled="!input.trim() || isLoading">Send</button>
     </form>
+    <div v-if="isLoading">
+      <p>Pensando..</p>
+    </div>
   </div>
 </template>

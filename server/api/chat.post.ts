@@ -1,7 +1,6 @@
 import { chat, toServerSentEventsResponse } from '@tanstack/ai';
-import { openaiCompatibleText } from '@tanstack/ai-openai/compatible';
-import { geminiText } from '@tanstack/ai-gemini';
-import { getparsedcvDef, test_tavily } from '../ai/utils/tools';
+import { openaiCompatibleText, openaiCompatible } from '@tanstack/ai-openai/compatible';
+import { getparsedcvDef, search_job, extract_job } from '../ai/utils/tools';
 import { system_prompt } from '../ai/utils/system';
 
 export default defineEventHandler(async (event) => {
@@ -17,15 +16,23 @@ export default defineEventHandler(async (event) => {
     });
 */
     ///local model
-
     const stream = chat({
       messages,
       adapter: openaiCompatibleText('llama.cpp', {
         baseURL: 'http://localhost:8080/v1',
         apiKey: 'not_api',
       }),
-      //systemPrompts: [system_prompt],
-      tools: [test_tavily],
+      systemPrompts: [system_prompt],
+      tools: [search_job, extract_job],
+      middleware: [{
+        name: 'token_usage',
+        onUsage: (_ctx, usage) => {
+          console.log(`input: ${usage.promptTokens}`)
+          console.log(`output: ${usage.completionTokens}`)
+          console.log(`total de tokens: ${usage.totalTokens}`)
+        },
+      }]
+
     });
 
     return toServerSentEventsResponse(stream);

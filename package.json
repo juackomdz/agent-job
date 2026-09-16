@@ -20,6 +20,7 @@
     "@tanstack/ai": "^0.54.0",
     "@tanstack/ai-gemini": "^0.29.2",
     "@tanstack/ai-openai": "^0.22.6",
+    "@tanstack/ai-opencode": "^0.4.5",
     "@tanstack/ai-vue": "^0.21.1",
     "better-sqlite3": "^13.0.3",
     "drizzle-orm": "1.0.0-rc.4",

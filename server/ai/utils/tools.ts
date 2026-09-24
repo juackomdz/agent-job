@@ -1,6 +1,17 @@
 import { toolDefinition } from '@tanstack/ai';
 import { z } from 'zod';
 import { TavilyApiResponse, TavilyExtractResponse } from '#shared/types';
+import { db } from '#shared/drizzle/db';
+import { offerTable } from '#shared/drizzle/schema';
+
+export const test_tool = toolDefinition({
+  name: 'test',
+  description: 'extrae la informacion del clima',
+  inputSchema: z.object(),
+  outputSchema: z.string(),
+}).server(async () => {
+  return 'el clima es de 23°';
+});
 
 export const getparsedcvDef = toolDefinition({
   name: 'get_cv',
@@ -30,7 +41,7 @@ export const search_job = toolDefinition({
   description: 'Busca en internet ofertas de trabajo en chile.',
   inputSchema: z.object({
     query: z.string().describe('terminos de busqueda'),
-    time_range: z.string()
+    time_range: z.string(),
   }),
   outputSchema: z.object({
     answer: z.string().optional(),
@@ -90,16 +101,20 @@ export const extract_job = toolDefinition({
         favicon: z.string().optional(),
       }),
     ),
-    failed_results: z.array(
-      z.object({
-        url: z.string(),
-        error: z.string(),
-      }),
-    ).optional(),
+    failed_results: z
+      .array(
+        z.object({
+          url: z.string(),
+          error: z.string(),
+        }),
+      )
+      .optional(),
     response_time: z.number(),
-    usage: z.object({
-      credits: z.number(),
-    }).optional(),
+    usage: z
+      .object({
+        credits: z.number(),
+      })
+      .optional(),
     request_id: z.string(),
   }),
 }).server(async ({ query, urls }) => {
@@ -113,7 +128,7 @@ export const extract_job = toolDefinition({
       query,
       urls,
       include_usage: false,
-      extract_depth: 'advanced'
+      extract_depth: 'advanced',
     }),
   });
 
@@ -144,19 +159,70 @@ export const extract_job = toolDefinition({
 });
 
 export const save_job = toolDefinition({
-  name: 'save_tool',
-  description: 'Guarda los datos de las ofertas que encuentres, como titulo, descripcion, url, etc.',
-  inputSchema: z.object({}),
-  outputSchema: z.array(
-    z.object({
-      id: z.number(),
-      title: z.string(),
-      description: z.string(),
-      company: z.string(),
-      url: z.string()
-    })
-  )
-}).server(async () => {
-
-  return []
-})
+  name: 'save_job_tool',
+  description:
+    'Guarda las ofertas de trabajo ya extraídas y rankeadas. Llamar solo después de search_tool y extract_tool. match es 0-100 entero. No inventes URLs ni empresas.',
+  inputSchema: z.object({
+    offers: z
+      .array(
+        z.object({
+          title: z.string().min(1).max(100).trim(),
+          description: z
+            .string()
+            .min(1)
+            .transform((s) => s.trim().slice(0, 2000)),
+          company: z.string().min(1).max(100).trim(),
+          match: z
+            .number()
+            .min(0)
+            .max(100)
+            .transform((v) => Math.round(v)),
+          url: z.string().url().max(500).trim(),
+        }),
+      )
+      .min(1)
+      .max(20),
+  }),
+  outputSchema: z.object({
+    count: z.number(),
+    offers: z.array(
+      z.object({
+        id: z.number(),
+        title: z.string(),
+        company: z.string(),
+        match: z.number().nullable(),
+        url: z.string(),
+      }),
+    ),
+  }),
+}).server(async ({ offers }) => {
+  if (!offers || offers.length === 0) {
+    throw new Error('save_job falló: offers viene vacío');
+  }
+  try {
+    const rows = offers.map((o) => ({
+      title: o.title.trim().slice(0, 100),
+      description: o.description.trim().slice(0, 2000),
+      company: o.company.trim().slice(0, 100),
+      match: Math.round(o.match),
+      url: o.url.trim(),
+    }));
+    const saved = await db
+      .insert(offerTable)
+      .values(rows)
+      .onConflictDoNothing({ target: offerTable.url })
+      .returning({
+        id: offerTable.id,
+        title: offerTable.title,
+        company: offerTable.company,
+        match: offerTable.match,
+        url: offerTable.url,
+      });
+    return {
+      count: saved.length,
+      offers: saved,
+    };
+  } catch (error) {
+    throw new Error(`save_job falló: ${error instanceof Error ? error.message : String(error)}`);
+  }
+});

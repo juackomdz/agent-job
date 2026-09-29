@@ -6,7 +6,7 @@ export const offerTable = sqliteTable('offers', {
   description: text().notNull(),
   company: text().notNull(),
   match: int(),
-  url: text().notNull().unique()
+  url: text().notNull().unique(),
 });
 
 export const profileTable = sqliteTable('profile', {

@@ -160,8 +160,7 @@ export const extract_job = toolDefinition({
 
 export const save_job = toolDefinition({
   name: 'save_job_tool',
-  description:
-    'Guarda las ofertas de trabajo ya extraídas y rankeadas. Llamar solo después de search_tool y extract_tool. match es 0-100 entero. No inventes URLs ni empresas.',
+  description: 'Guarda las ofertas de trabajo que extrajo inmediatamente luego de buscar.',
   inputSchema: z.object({
     offers: z
       .array(

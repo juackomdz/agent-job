@@ -4,6 +4,10 @@
 
 Nuxt 4 (Vue 3 + TypeScript) job-search agent for the Chilean IT market. Vue SPA + one Nitro SSE route. Prompts, tool descriptions, and UI copy are in Spanish.
 
+## Notes
+
+- Never check .env files
+
 ## Commands
 
 - `pnpm dev` — dev server on `localhost:3000`
@@ -16,7 +20,6 @@ Nuxt 4 (Vue 3 + TypeScript) job-search agent for the Chilean IT market. Vue SPA 
 
 ## Env & SQLite
 
-- `.env` is gitignored; dev vars live there: `DB_FILE_NAME=./test.db`, `NVIDIA_API`, `TAVILY_API_KEY`, plus unused `GEMINI_API_KEY`, `OPENROUTER_API_KEY`, `OPENCODE_API`. Never commit real keys.
 - DB is SQLite at `./test.db` (gitignored). `shared/drizzle/db.ts` opens it at import time via `DB_FILE_NAME!`. **`drizzle/` holds no committed migrations**; schema lives in `shared/drizzle/schema.ts` and is applied with `pnpm db:push`. Fresh clone: run `db:push` first.
 - Native deps (`better-sqlite3`, esbuild, @google/genai, @openrouter/sdk) require entries in `pnpm-workspace.yaml` `allowBuilds` or pnpm blocks their install scripts — add new native deps there.
 

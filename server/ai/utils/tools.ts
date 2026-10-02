@@ -1,12 +1,12 @@
 import { toolDefinition } from '@tanstack/ai';
 import { z } from 'zod';
 import { TavilyApiResponse, TavilyExtractResponse } from '#shared/types';
-import { useDb } from '#shared/drizzle/db'
-import { CvSchema } from '#shared/cvSchema'
+import { useDb } from '#shared/drizzle/db';
+import { CvSchema } from '#shared/cvSchema';
 import { getCvProfile, saveCvProfile } from '#shared/drizzle/repository';
 import { offerTable } from '#shared/drizzle/schema';
 
-const db = useDb()
+const db = useDb();
 
 export const test_tool = toolDefinition({
   name: 'test',
@@ -232,16 +232,18 @@ export const save_job = toolDefinition({
 
 export const save_profile = toolDefinition({
   name: 'save_profile',
-  description: 'Guarda los datos del perfil que recibes. Esto debes hacerlo despues de que el usuario suba su CV.',
+  description:
+    'Guarda los datos del perfil que recibes. Esto debes hacerlo despues de que el usuario suba su CV.',
   inputSchema: z.object({
-    profile: CvSchema
-  })
+    profile: CvSchema,
+  }),
 }).server(async ({ profile }) => {
-
   try {
-    const id = await saveCvProfile(profile)
-    return { id }
+    const id = await saveCvProfile(profile);
+    return { id };
   } catch (error) {
-    throw new Error(`save_profile falló: ${error instanceof Error ? error.message : String(error)}`)
+    throw new Error(
+      `save_profile falló: ${error instanceof Error ? error.message : String(error)}`,
+    );
   }
-})
+});

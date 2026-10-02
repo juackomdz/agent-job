@@ -1,14 +1,20 @@
-import { chat, toServerSentEventsResponse, untilFinishReason, combineStrategies, maxIterations } from '@tanstack/ai';
-import { openaiCompatibleText, openaiCompatible } from '@tanstack/ai-openai/compatible';
+import {
+  chat,
+  toServerSentEventsResponse,
+  untilFinishReason,
+  combineStrategies,
+  maxIterations,
+} from '@tanstack/ai';
+import { openaiCompatible } from '@tanstack/ai-openai/compatible';
 import { createMCPClient } from '@tanstack/ai-mcp';
 import { save_job, save_profile } from '../ai/utils/tools';
 import { system_prompt } from '../ai/utils/system';
+import { adapter } from '../ai/utils/adapter';
 
 export default defineEventHandler(async (event) => {
   const { messages } = await readBody(event);
 
   try {
-
     const mcp = await createMCPClient({
       name: 'tavily-mcp',
       transport: {
@@ -16,7 +22,6 @@ export default defineEventHandler(async (event) => {
         url: `https://mcp.tavily.com/mcp/?tavilyApiKey=${process.env.TAVILY_API_KEY}`,
       },
     });
-
 
     const nvidia = openaiCompatible({
       apiKey: process.env.NVIDIA_API!,
@@ -32,19 +37,16 @@ export default defineEventHandler(async (event) => {
     ///local model
     const stream = chat({
       messages,
-      adapter: /*gemini('gemma-4-31b-it')*/ /*nvidia('openai/gpt-oss-20b')*/ openaiCompatibleText(
-        'llama.cpp',
-        {
-          baseURL: 'http://localhost:8080/v1',
-          apiKey: 'not_api',
-        },
-      ),
+      adapter,
       systemPrompts: [system_prompt],
       mcp: {
         clients: [mcp],
       },
-      tools: [save_job, /*save_profile*/],
-      agentLoopStrategy: combineStrategies([maxIterations(10), untilFinishReason(['stop', 'length'])]),
+      tools: [save_job /*save_profile*/],
+      agentLoopStrategy: combineStrategies([
+        maxIterations(10),
+        untilFinishReason(['stop', 'length']),
+      ]),
       middleware: [
         {
           name: 'token_usage',

@@ -1,21 +1,13 @@
-import { chat, toServerSentEventsResponse, untilFinishReason } from '@tanstack/ai';
+import { chat, toServerSentEventsResponse, untilFinishReason, combineStrategies, maxIterations } from '@tanstack/ai';
 import { openaiCompatibleText, openaiCompatible } from '@tanstack/ai-openai/compatible';
 import { createMCPClient } from '@tanstack/ai-mcp';
-import { getparsedcvDef, test_tool, save_job } from '../ai/utils/tools';
+import { save_job, save_profile } from '../ai/utils/tools';
 import { system_prompt } from '../ai/utils/system';
 
 export default defineEventHandler(async (event) => {
   const { messages } = await readBody(event);
 
   try {
-    ///gemini
-    /*
-    const stream = chat({
-      messages,
-      adapter: geminiText('gemma'),
-      tools: [test],
-    });
-*/
 
     const mcp = await createMCPClient({
       name: 'tavily-mcp',
@@ -24,6 +16,7 @@ export default defineEventHandler(async (event) => {
         url: `https://mcp.tavily.com/mcp/?tavilyApiKey=${process.env.TAVILY_API_KEY}`,
       },
     });
+
 
     const nvidia = openaiCompatible({
       apiKey: process.env.NVIDIA_API!,
@@ -50,8 +43,8 @@ export default defineEventHandler(async (event) => {
       mcp: {
         clients: [mcp],
       },
-      tools: [save_job],
-      agentLoopStrategy: untilFinishReason(['stop', 'length']),
+      tools: [save_job, /*save_profile*/],
+      agentLoopStrategy: combineStrategies([maxIterations(10), untilFinishReason(['stop', 'length'])]),
       middleware: [
         {
           name: 'token_usage',

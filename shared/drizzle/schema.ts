@@ -1,4 +1,5 @@
-import { int, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { int, sqliteTable, text, index, primaryKey } from 'drizzle-orm/sqlite-core';
+import { type CvProfile } from '#shared/cvSchema'
 
 export const offerTable = sqliteTable('offers', {
   id: int().primaryKey({ autoIncrement: true }),
@@ -9,16 +10,25 @@ export const offerTable = sqliteTable('offers', {
   url: text().notNull().unique(),
 });
 
-export const profileTable = sqliteTable('profile', {
-  id: int().primaryKey({ autoIncrement: true }),
-  name: text().notNull(),
-  email: text().notNull(),
-  phone: text({ length: 12 }),
-});
+export const cvProfiles = sqliteTable('cv_profiles', {
+  id: text('id').primaryKey(),
+  createdAt: int('created_at', { mode: 'timestamp' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  fullName: text('full_name'),
+  email: text('email'),
+  headline: text('headline'),
+  location: text('location'),
+  data: text('data', { mode: 'json' }).$type<CvProfile>().notNull(),
+})
 
-export const skillsTable = sqliteTable('skills', {
-  id: int().primaryKey({ autoIncrement: true }),
-  type: text().notNull(),
-  value: text().notNull(),
-  profileId: int('profile_id').references(() => profileTable.id),
-});
+export const cvSkills = sqliteTable(
+  'cv_skills',
+  {
+    profileId: text('profile_id')
+      .notNull()
+      .references(() => cvProfiles.id, { onDelete: 'cascade' }),
+    skill: text('skill').notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.profileId, t.skill] }), index('cv_skills_skill_idx').on(t.skill)],
+)

@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { eq } from 'drizzle-orm';
+import { desc } from 'drizzle-orm';
 import type { CvProfile } from '#shared/cvSchema';
 import { cvProfiles, cvSkills } from '../drizzle/schema';
 import { useDb } from '../drizzle/db';
@@ -9,7 +9,6 @@ export async function saveCvProfile(profile: CvProfile) {
   const id = randomUUID();
   const skills = [...new Set(profile.skills.map((s) => s.trim().toLowerCase()).filter(Boolean))];
 
-  // better-sqlite3 es síncrono: el callback de la transacción no es async
   db.transaction((tx) => {
     tx.insert(cvProfiles)
       .values({
@@ -32,6 +31,6 @@ export async function saveCvProfile(profile: CvProfile) {
   return id;
 }
 
-export async function getCvProfile(id: string) {
-  return useDb().select().from(cvProfiles).where(eq(cvProfiles.id, id)).get();
+export async function getCvProfile() {
+  return useDb().select().from(cvProfiles).orderBy(desc(cvProfiles.createdAt)).limit(1).get();
 }

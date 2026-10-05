@@ -7,7 +7,7 @@ import {
 } from '@tanstack/ai';
 import { openaiCompatible } from '@tanstack/ai-openai/compatible';
 import { createMCPClient } from '@tanstack/ai-mcp';
-import { save_job, save_profile } from '../ai/utils/tools';
+import { save_job, get_data } from '../ai/utils/tools';
 import { system_prompt } from '../ai/utils/system';
 import { adapter } from '../ai/utils/adapter';
 
@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
       mcp: {
         clients: [mcp],
       },
-      tools: [save_job /*save_profile*/],
+      tools: [save_job, get_data],
       agentLoopStrategy: combineStrategies([
         maxIterations(10),
         untilFinishReason(['stop', 'length']),

@@ -15,6 +15,8 @@ export default defineEventHandler(async (event) => {
   const { messages } = await readBody(event);
 
   try {
+
+    const abortController = new AbortController()
     const mcp = await createMCPClient({
       name: 'tavily-mcp',
       transport: {
@@ -34,15 +36,16 @@ export default defineEventHandler(async (event) => {
         'nvidia/nemotron-3.5-lightning-30b-a3b',
       ],
     });
-    ///local model
+
     const stream = chat({
       messages,
-      adapter,
+      adapter: nvidia('openai/gpt-oss-20b'),
       systemPrompts: [system_prompt],
       mcp: {
         clients: [mcp],
       },
       tools: [save_job, get_data],
+      abortController,
       agentLoopStrategy: combineStrategies([
         maxIterations(10),
         untilFinishReason(['stop', 'length']),
@@ -62,7 +65,7 @@ export default defineEventHandler(async (event) => {
       ],
     });
 
-    return toServerSentEventsResponse(stream);
+    return toServerSentEventsResponse(stream, { abortController });
   } catch (error) {
     throw createError({
       statusCode: 500,

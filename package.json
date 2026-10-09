@@ -17,14 +17,17 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
     "@tanstack/ai": "^0.58.0",
     "@tanstack/ai-gemini": "^0.32.1",
     "@tanstack/ai-mcp": "^0.4.6",
     "@tanstack/ai-openai": "^0.23.2",
     "@tanstack/ai-vue": "^0.24.4",
     "better-sqlite3": "^13.0.3",
+    "daisyui": "^5.7.47",
     "drizzle-orm": "1.0.0-rc.4",
     "nuxt": "^4.5.2",
+    "tailwindcss": "^4.3.3",
     "unpdf": "^1.8.1",
     "vue": "^3.5.43",
     "vue-router": "^5.3.1",

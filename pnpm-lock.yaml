@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@lucide/vue':
+        specifier: ^1.55.0
+        version: 1.55.0(vue@3.5.43)
       '@tailwindcss/vite':
         specifier: ^4.3.3
         version: 4.3.3(vite@8.3.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2))
@@ -26,6 +29,9 @@ importers:
       '@tanstack/ai-vue':
         specifier: ^0.24.4
         version: 0.24.4(@tanstack/ai@0.58.0(zod@4.6.5))(vue@3.5.43)(zod@4.6.5)
+      '@tanstack/vue-table':
+        specifier: ^9.2.8
+        version: 9.2.8(vue@3.5.43)
       better-sqlite3:
         specifier: ^13.0.3
         version: 13.0.3
@@ -610,6 +616,11 @@ packages:
 
   '@kwsites/promise-deferred@1.1.1':
     resolution: {integrity: sha512-GaHYm+c0O9MjZRu0ongGBRbinu8gVAMd2UZjji6jVmqKtZluZnptXGWhz1E8j8D2HJ3f/yMxKAUC0b+57wncIw==}
+
+  '@lucide/vue@1.55.0':
+    resolution: {integrity: sha512-3lpuTiVGIMbG7vEVhcDnHvIu+ZkjXka7eOp9tIA9iDPu6GHpfqwykVyAb+LM1uYYVgSI9Myo4HGzTvVnTS2CyA==}
+    peerDependencies:
+      vue: '>=3.0.1'
 
   '@mapbox/node-pre-gyp@2.0.3':
     resolution: {integrity: sha512-uwPAhccfFJlsfCxMYTwOdVfOz3xqyj8xYL3zJj8f0pb30tLohnnFPhLuqp4/qoEz8sNxe4SESZedcBojRefIzg==}
@@ -1526,6 +1537,19 @@ packages:
     resolution: {integrity: sha512-NLsrAlQD70aN2uJPRDpXtXaeOwxJC4ikUWY6tb1nV3Vwxs0JoSbttHB3l9pxGmzpYC0JfEkUKoQ4oshlPhtzrg==}
     peerDependencies:
       '@tanstack/ai': ^0.59.0
+
+  '@tanstack/store@0.11.2':
+    resolution: {integrity: sha512-sJ4mjol8uQsHV0gOJzzjwXfh2Fwm+Sz0+8deqiTm4jGbMdjzNSW+xZCFm0kUa870uhd8yi+DpKnZb5Kc4apa0Q==}
+
+  '@tanstack/table-core@9.2.8':
+    resolution: {integrity: sha512-M4D6fY5jnc7z7TaoD3Pjvz5R+8MbhzCGYdkcFf2T1AgjigwLinvFWZh6mtqfN016A7yGIroOL0GiTlVGsTh6Vg==}
+    engines: {node: '>=20'}
+
+  '@tanstack/vue-table@9.2.8':
+    resolution: {integrity: sha512-1X/hstF4Il82jCpel5Ew1CSUSeMLxf+KkQLJVQ2GIsL9VVV2FuwtlfcvEBhTq7QrEDcz8LNEEQEugYEUAtztvQ==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      vue: '>=3.2'
 
   '@types/better-sqlite3@9.6.0':
     resolution: {integrity: sha512-ZEEwBSgMu7GYJOynoagg5X9JbxfL6dTJDsgViJIqh67jV44kyOr9RXfmFjLK5rzC4MWssP06t9hu/JwGDnUbCg==}
@@ -4892,6 +4916,10 @@ snapshots:
 
   '@kwsites/promise-deferred@1.1.1': {}
 
+  '@lucide/vue@1.55.0(vue@3.5.43)':
+    dependencies:
+      vue: 3.5.43
+
   '@mapbox/node-pre-gyp@2.0.3(supports-color@10.2.2)':
     dependencies:
       consola: 3.4.2
@@ -5811,6 +5839,18 @@ snapshots:
       - '@smithy/signature-v4'
       - ws
       - zod
+
+  '@tanstack/store@0.11.2': {}
+
+  '@tanstack/table-core@9.2.8':
+    dependencies:
+      '@tanstack/store': 0.11.2
+
+  '@tanstack/vue-table@9.2.8(vue@3.5.43)':
+    dependencies:
+      '@tanstack/store': 0.11.2
+      '@tanstack/table-core': 9.2.8
+      vue: 3.5.43
 
   '@types/better-sqlite3@9.6.0':
     dependencies:

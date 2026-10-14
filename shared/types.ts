@@ -28,3 +28,12 @@ interface FailedResults {
   url: string;
   error: string;
 }
+
+export interface Offer {
+  id: number;
+  title: string;
+  company: string;
+  match: number | null;
+  url: string;
+  description: string;
+}

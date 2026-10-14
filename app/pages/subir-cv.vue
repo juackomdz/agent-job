@@ -37,10 +37,11 @@ const subir = async () => {
 </script>
 
 <template>
-  <div>
-    <form @submit.prevent="subir">
-      <input type="file" @change="handleFile" /> <br />
-      <button>Subir</button>
+  <div class="mx-auto flex w-full max-w-md flex-col items-center gap-4 text-center">
+    <h1 class="text-xl font-bold tracking-tight">Probar PDF</h1>
+    <form class="flex w-full flex-col items-center gap-3" @submit.prevent="subir">
+      <input type="file" class="file-input file-input-bordered w-full" @change="handleFile" />
+      <button class="btn btn-primary btn-sm">Subir</button>
     </form>
   </div>
 </template>

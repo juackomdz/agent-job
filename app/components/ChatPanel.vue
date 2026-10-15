@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue';
 import { fetchServerSentEvents, useChat, type UIMessage } from '@tanstack/ai-vue';
+import { Square } from '@lucide/vue'
 
 const props = withDefaults(
   defineProps<{
@@ -44,12 +45,8 @@ watch(
 </script>
 
 <template>
-  <section class="mx-auto w-full border border-base-200 bg-base-100" :class="compact ? 'h-[520px]' : 'h-[600px]'">
+  <section class="mx-auto w-full border border-base-200 bg-base-100" :class="compact ? 'h-130' : 'h-150'">
     <div class="flex h-full min-h-0 flex-col">
-      <div class="flex items-center justify-center gap-2 border-b border-base-200 px-4 py-3">
-        <h2 class="text-sm font-bold">Chat</h2>
-        <button v-if="isLoading" class="btn btn-ghost btn-xs" @click="stop()">Detener</button>
-      </div>
 
       <div ref="scrollRef" class="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4">
         <p v-if="!messages.length" class="mx-auto max-w-md text-center text-sm text-base-content/60">
@@ -81,7 +78,14 @@ watch(
           class="input input-bordered w-full"
           :disabled="isLoading"
         />
-        <button type="submit" class="btn btn-primary" :disabled="!canSend">Enviar</button>
+        <div v-if="!isLoading">
+          <button type="submit" class="btn btn-primary" :disabled="!canSend">Enviar</button>
+        </div>
+        <div v-else>
+            <button class="btn btn-primary" @click="stop()">
+              <Square/>
+            </button>
+        </div>
       </form>
     </div>
   </section>

@@ -1,79 +1,24 @@
 <script setup lang="ts">
-import { computed, h } from 'vue';
-import {
-  useTable,
-  tableFeatures,
-  FlexRender,
-  type ColumnDef,
-  columnSizingFeature,
-} from '@tanstack/vue-table';
+import { FlexRender } from '@tanstack/vue-table';
 import type { Offer } from '#shared/types';
+import type { OffersTableInstance } from '../composables/useOffersTable';
 
 const props = defineProps<{
   offers: Offer[];
   loading?: boolean;
+  table: OffersTableInstance;
 }>();
 
-const sorted = computed(() =>
-  [...props.offers].sort((a, b) => (b.match ?? 0) - (a.match ?? 0)).slice(0, 8),
-);
-
-const features = tableFeatures({ columnSizingFeature });
-
-const columns: Array<ColumnDef<typeof features, Offer>> = [
-  {
-    accessorKey: 'title',
-    header: 'Oferta',
-    cell: (info) => info.getValue(),
-    size: 400,
-  },
-  {
-    accessorKey: 'company',
-    header: 'Empresa',
-    cell: (info) => info.getValue(),
-    size: 180,
-  },
-  {
-    accessorKey: 'url',
-    header: 'Link',
-    cell: (info) =>
-      h(
-        'a',
-        {
-          href: info.getValue<string>(),
-          target: '_blank',
-          rel: 'noopener noreferrer',
-          class: 'link link-primary',
-        },
-        'Abrir',
-      ),
-    size: 140,
-  },
-  {
-    accessorKey: 'match',
-    header: 'Match',
-    cell: (info) => `${info.getValue()}%`,
-    size: 90,
-  },
-];
-
-const table = useTable({
-  key: 'offers_table',
-  features,
-  columns,
-  data: sorted,
-});
+const table = props.table;
 </script>
 
 <template>
   <section class="w-full text-center">
-    <h2 class="mb-2 text-sm font-bold">Mejores ofertas</h2>
-
     <div v-if="loading" class="mx-auto flex w-full flex-col items-center gap-2">
       <div v-for="i in 4" :key="i" class="skeleton h-12 w-full" />
     </div>
 
-    <p v-else-if="!sorted.length" class="mx-auto max-w-md text-sm text-base-content/60">
+    <p v-else-if="!props.offers.length" class="mx-auto max-w-md text-sm text-base-content/60">
       Sin ofertas. Pide en el chat que busque empleos.
     </p>
 

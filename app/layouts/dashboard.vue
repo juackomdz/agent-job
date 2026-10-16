@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { House, MessagesCircle, FileUser, List } from '@lucide/vue'
+import { House, MessagesCircle, FileUser, List } from '@lucide/vue';
 
 const route = useRoute();
 
@@ -7,7 +7,7 @@ const links = [
   { to: '/', label: 'Panel', icon: House },
   { to: '/chat', label: 'Chat', icon: MessagesCircle },
   { to: '/subir-cv', label: 'Subir CV', icon: FileUser },
-  { to: '/ofertas', label: 'Todas tus ofertas', icon: List}
+  { to: '/ofertas', label: 'Todas tus ofertas', icon: List },
 ];
 
 function isActive(to: string) {
@@ -48,7 +48,7 @@ function isActive(to: string) {
             <ul class="menu w-full gap-1 p-0">
               <li v-for="l in links" :key="l.to">
                 <NuxtLink :to="l.to" :class="{ active: isActive(l.to) }">
-                  <component :is="l.icon" class="size-5"/>
+                  <component :is="l.icon" class="size-5" />
                   {{ l.label }}
                 </NuxtLink>
               </li>

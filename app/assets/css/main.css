@@ -1,10 +1,10 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "daisyui" {
   themes: garden --default;
 }
 
 @plugin "daisyui/theme" {
-  name: "claro";
+  name: 'claro';
   default: true;
   prefersdark: false;
   color-scheme: light;

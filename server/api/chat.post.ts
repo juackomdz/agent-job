@@ -11,12 +11,11 @@ import { system_prompt } from '../ai/utils/system';
 import { adapter } from '../ai/utils/adapter';
 
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig()
+  const config = useRuntimeConfig();
 
   const { messages } = await readBody(event);
 
   try {
-
     const mcp = await createMCPClient({
       name: 'tavily-mcp',
       transport: {

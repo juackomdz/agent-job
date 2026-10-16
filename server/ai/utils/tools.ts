@@ -9,15 +9,14 @@ const db = useDb();
 
 export const get_data = toolDefinition({
   name: 'get_cv_data',
-  description:
-    'Muestra los datos del perfil que estan almacenados en la base de datos',
-  inputSchema: z.object({})
+  description: 'Muestra los datos del perfil que estan almacenados en la base de datos',
+  inputSchema: z.object({}),
 }).server(async () => {
   try {
-    const profile = await getCvProfile()
-    return { profile }
+    const profile = await getCvProfile();
+    return { profile };
   } catch (error) {
-    throw new Error(`error: fallo traer perfil -> ${error}`)
+    throw new Error(`error: fallo traer perfil -> ${error}`);
   }
 });
 

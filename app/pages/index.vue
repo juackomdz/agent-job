@@ -11,7 +11,8 @@ interface Offer {
 }
 
 const { data: offersData, pending: offersPending } = await useFetch<{ offers: Offer[] }>(
-  '/api/offers');
+  '/api/offers',
+);
 
 const offers = computed(() => offersData.value?.offers ?? []);
 const table = useOffersTable(offers, 8);
@@ -22,7 +23,7 @@ const avgMatch = computed(() => {
 });
 const topMatch = computed(() => Math.max(0, ...offers.value.map((o) => o.match ?? 0)));
 
-console.log(offers.value.length)
+console.log(offers.value.length);
 </script>
 
 <template>

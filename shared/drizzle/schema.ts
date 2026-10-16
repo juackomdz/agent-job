@@ -8,7 +8,9 @@ export const offerTable = sqliteTable('offers', {
   company: text().notNull(),
   match: int(),
   url: text().notNull().unique(),
-  createdAt: int('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date())
+  createdAt: int('created_at', { mode: 'timestamp' })
+    .notNull()
+    .$defaultFn(() => new Date()),
 });
 
 export const cvProfiles = sqliteTable('cv_profiles', {

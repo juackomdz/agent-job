@@ -23,7 +23,7 @@ export async function saveCvProfile(profile: CvProfile) {
 
     if (skills.length) {
       tx.insert(cvSkills)
-        .values(skills.map((skill) => ({ profileId: id, skill })))
+        .values(skills.map((skill) => ({ profileId: id, skill, id: randomUUID() })))
         .run();
     }
   });

@@ -8,6 +8,7 @@ export const offerTable = sqliteTable('offers', {
   company: text().notNull(),
   match: int(),
   url: text().notNull().unique(),
+  createdAt: int('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date())
 });
 
 export const cvProfiles = sqliteTable('cv_profiles', {
@@ -25,6 +26,7 @@ export const cvProfiles = sqliteTable('cv_profiles', {
 export const cvSkills = sqliteTable(
   'cv_skills',
   {
+    id: text().primaryKey(),
     profileId: text('profile_id')
       .notNull()
       .references(() => cvProfiles.id, { onDelete: 'cascade' }),

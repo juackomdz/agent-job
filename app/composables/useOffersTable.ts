@@ -11,7 +11,7 @@ import type { Offer } from '#shared/types';
 
 export type OffersTableInstance = ReturnType<typeof useOffersTable>;
 
-export function useOffersTable(offers: { value: Offer[] }, pages: number = 10) {
+export function useOffersTable(offers: { value: Offer[] }, items: number = 10) {
   const sorted = computed(() =>
     [...offers.value].sort((a, b) => (b.match! - a.match!)),
   );
@@ -67,7 +67,7 @@ export function useOffersTable(offers: { value: Offer[] }, pages: number = 10) {
     initialState: {
       pagination: {
         pageIndex: 0,
-        pageSize: pages,
+        pageSize: items,
       },
     },
   });

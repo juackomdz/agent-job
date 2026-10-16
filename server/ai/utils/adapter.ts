@@ -1,6 +1,8 @@
 import { openaiCompatibleText } from '@tanstack/ai-openai/compatible';
 
-export const adapter = openaiCompatibleText('llama.cpp', {
-  baseURL: 'http://localhost:8080/v1',
-  apiKey: 'not_api',
+const config = useRuntimeConfig()
+
+export const adapter = openaiCompatibleText('local', {
+  baseURL: config.baseUrl,
+  apiKey: config.modelApiKey,
 });

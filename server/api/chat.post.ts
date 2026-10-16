@@ -5,47 +5,34 @@ import {
   combineStrategies,
   maxIterations,
 } from '@tanstack/ai';
-import { openaiCompatible } from '@tanstack/ai-openai/compatible';
 import { createMCPClient } from '@tanstack/ai-mcp';
 import { save_job, get_data } from '../ai/utils/tools';
 import { system_prompt } from '../ai/utils/system';
 import { adapter } from '../ai/utils/adapter';
 
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig()
+
   const { messages } = await readBody(event);
 
   try {
 
-    const abortController = new AbortController()
     const mcp = await createMCPClient({
       name: 'tavily-mcp',
       transport: {
         type: 'http',
-        url: `https://mcp.tavily.com/mcp/?tavilyApiKey=${process.env.TAVILY_API_KEY}`,
+        url: `https://mcp.tavily.com/mcp/?tavilyApiKey=${config.tavilyApiKey}`,
       },
-    });
-
-    const nvidia = openaiCompatible({
-      apiKey: process.env.NVIDIA_API!,
-      baseURL: 'https://integrate.api.nvidia.com/v1',
-      models: [
-        'moonshotai/kimi-k3',
-        'nvidia/nemotron-3-ultra-550b-a55b',
-        'openai/gpt-oss-20b',
-        'google/gemma-4-31b-it',
-        'nvidia/nemotron-3.5-lightning-30b-a3b',
-      ],
     });
 
     const stream = chat({
       messages,
-      adapter: nvidia('openai/gpt-oss-20b'),
+      adapter,
       systemPrompts: [system_prompt],
       mcp: {
         clients: [mcp],
       },
       tools: [save_job, get_data],
-      abortController,
       agentLoopStrategy: combineStrategies([
         maxIterations(10),
         untilFinishReason(['stop', 'length']),
@@ -65,7 +52,7 @@ export default defineEventHandler(async (event) => {
       ],
     });
 
-    return toServerSentEventsResponse(stream, { abortController });
+    return toServerSentEventsResponse(stream);
   } catch (error) {
     throw createError({
       statusCode: 500,

@@ -7,6 +7,9 @@ import { CvSchema } from '#shared/cvSchema';
 const MAX_SIZE_BYTES = 5 * 1024 * 1024;
 
 export default defineEventHandler(async (event) => {
+
+  const { model } = useRuntimeConfig()
+
   const formData = await readMultipartFormData(event);
 
   if (!formData) {
@@ -64,7 +67,7 @@ export default defineEventHandler(async (event) => {
 
   const profile = await chat({
     stream: false,
-    adapter,
+    adapter: adapter(model),
     outputSchema: CvSchema,
     messages: [
       {

@@ -12,5 +12,6 @@ export default defineNuxtConfig({
     tavilyApiKey: '',
     baseUrl: '',
     modelApiKey: '',
+    model: ''
   },
 });

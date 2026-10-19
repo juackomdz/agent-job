@@ -14,6 +14,7 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
 
   const { messages } = await readBody(event);
+  const abortController = new AbortController()
 
   try {
     const mcp = await createMCPClient({
@@ -26,7 +27,7 @@ export default defineEventHandler(async (event) => {
 
     const stream = chat({
       messages,
-      adapter,
+      adapter: adapter(config.model),
       systemPrompts: [system_prompt],
       mcp: {
         clients: [mcp],
@@ -36,6 +37,7 @@ export default defineEventHandler(async (event) => {
         maxIterations(10),
         untilFinishReason(['stop', 'length']),
       ]),
+      abortController,
       middleware: [
         {
           name: 'token_usage',
@@ -51,7 +53,7 @@ export default defineEventHandler(async (event) => {
       ],
     });
 
-    return toServerSentEventsResponse(stream);
+    return toServerSentEventsResponse(stream, { abortController });
   } catch (error) {
     throw createError({
       statusCode: 500,

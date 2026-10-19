@@ -15,23 +15,23 @@ importers:
         specifier: ^4.3.3
         version: 4.3.3(vite@8.3.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2))
       '@tanstack/ai':
-        specifier: ^0.58.0
-        version: 0.58.0(zod@4.6.5)
+        specifier: ^0.69.0
+        version: 0.69.0(zod@4.6.5)
       '@tanstack/ai-gemini':
-        specifier: ^0.32.1
-        version: 0.32.1(@modelcontextprotocol/sdk@1.30.1(supports-color@10.2.2)(zod@4.6.5))(@tanstack/ai@0.58.0(zod@4.6.5))(supports-color@10.2.2)
+        specifier: ^0.38.0
+        version: 0.38.0(@modelcontextprotocol/sdk@1.30.1(supports-color@10.2.2)(zod@4.6.5))(@tanstack/ai@0.69.0(zod@4.6.5))(supports-color@10.2.2)
       '@tanstack/ai-mcp':
-        specifier: ^0.4.6
-        version: 0.4.6(supports-color@10.2.2)(zod@4.6.5)
+        specifier: ^0.9.0
+        version: 0.9.0(zod@4.6.5)
       '@tanstack/ai-openai':
-        specifier: ^0.23.2
-        version: 0.23.2(@tanstack/ai@0.58.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5)
+        specifier: ^0.30.0
+        version: 0.30.0(@tanstack/ai@0.69.0(zod@4.6.5))(undici@8.11.2)(ws@8.21.3)(zod@4.6.5)
       '@tanstack/ai-vue':
-        specifier: ^0.24.4
-        version: 0.24.4(@tanstack/ai@0.58.0(zod@4.6.5))(vue@3.5.43)(zod@4.6.5)
+        specifier: ^0.26.4
+        version: 0.26.4(@tanstack/ai@0.69.0(zod@4.6.5))(vue@3.5.43)(zod@4.6.5)
       '@tanstack/vue-table':
-        specifier: ^9.2.8
-        version: 9.2.8(vue@3.5.43)
+        specifier: ^9.3.1
+        version: 9.3.1(vue@3.5.43)
       better-sqlite3:
         specifier: ^13.0.3
         version: 13.0.3
@@ -77,14 +77,6 @@ importers:
         version: 1.85.0
 
 packages:
-
-  '@ag-ui/core@0.1.1-canary.beta.0':
-    resolution: {integrity: sha512-zcP3RH5p3HJTZ0kyQxNOL1blnVFTDpaShitR7UMS/thwFdl48V6CAG+WQBcYEu/dfa8mKonRez88N0Ok+nEI+w==}
-    peerDependencies:
-      zod: ^3.25.18 || ^4.0.0
-    peerDependenciesMeta:
-      zod:
-        optional: true
 
   '@ag-ui/core@1.0.0':
     resolution: {integrity: sha512-yCRhsQvb4+lmGMrDsi4TOJxqKpm/kb3H64wwL+Z90jNVrkhy17RErfzsNgybfbjNKLM0nenEDYDVJsZHJJSigQ==}
@@ -627,6 +619,14 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
+  '@modelcontextprotocol/client@2.3.1':
+    resolution: {integrity: sha512-mIGZXpHsjnZ6lD+gD/WCMpR5k8yVQQ8nNFH1N0Srf7AvnwTUMYD6pvTY8ng2+He5FfV7YMZLmrjL7cLa/cc3dQ==}
+    engines: {node: '>=20'}
+
+  '@modelcontextprotocol/core@2.3.1':
+    resolution: {integrity: sha512-laVmIhPGpWi7rG9q+0UigblRN0Hws/Yjlb6qLFtVqryXVLkc4h+yN8z731POD2LnAGQlFe7/tXhUm7Bi0YB91g==}
+    engines: {node: '>=20'}
+
   '@modelcontextprotocol/sdk@1.30.1':
     resolution: {integrity: sha512-H2HxLvC3HDNybePJaLdSrU1hhUK5iQw+WvV1b01myFyI7sdVGe1u/IPTE5D9fGCiJDVtgMV/lmFkQXLmQyIFYA==}
     engines: {node: '>=18'}
@@ -636,6 +636,10 @@ packages:
     peerDependenciesMeta:
       '@cfworker/json-schema':
         optional: true
+
+  '@modelcontextprotocol/server@2.3.1':
+    resolution: {integrity: sha512-e59MfWuSssj6DoQ96JCTqdW1AXT5/XtnTl0WWd6MU1Ka434fFUGGosCLJbGNySDhHGvxQWoRWK137FXYFkYNWw==}
+    engines: {node: '>=20'}
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     resolution: {integrity: sha512-oTXEIha4SsuXdTA4Iyskj0kpdx2yVXdhd75c2v3xGrHFfVMsbhTPZU/nMPL4sWKo4pBHm3aucLaqGlF696dTyQ==}
@@ -1458,58 +1462,37 @@ packages:
     peerDependencies:
       vite: ^5.2.0 || ^6 || ^7 || ^8
 
-  '@tanstack/ai-client@0.34.0':
-    resolution: {integrity: sha512-sGRitgBHe85qWUrRWTTS1CDWf4M0x3+hXE6SFlFODiVcIY8+lMclYQWKEH1MX1kUy6RJhNcNQOQtiSBW3qGYZA==}
+  '@tanstack/ai-client@0.39.3':
+    resolution: {integrity: sha512-co3F4rh1xhadedk5wfvNV+sja5iueIS/S8+KGZjQ/C6+IA68rfE9iWhe2xNO4hYX4bOvyXnA5XX/d0KOFduZDA==}
 
-  '@tanstack/ai-event-client@0.12.1':
-    resolution: {integrity: sha512-rQZ94m4FDyGPJA868/Z7ipZGQ9QA4taxYnC7jwIbRm9eRYf5ig+cmwirBmd/adPSsvL8Qr6hgEX8SULrpJpIyA==}
+  '@tanstack/ai-event-client@0.13.1':
+    resolution: {integrity: sha512-lCPcshu6Sd4tFNeMSr+HXgdqCGupYU2cpJZVUent4GkFx41dXzrBaKkwOgkji6olDBT99OBagWCce1NZ15XeJA==}
 
-  '@tanstack/ai-event-client@0.13.0':
-    resolution: {integrity: sha512-qGN7saScQHqDd06DE5CNG+wl1O9v6anwsGCCeP4N7zFbZd5k9/2C1u4cdJ2+Qxl2aA8drusLFZMhY/ljhBJqLQ==}
-
-  '@tanstack/ai-gemini@0.32.1':
-    resolution: {integrity: sha512-XKO46o4CiF1iAMNqJdD5pVEeph+0p4YCuXVVho7p2ppvEZrpdaWbxflGgJQBvxDiVfJaKt/8sccW8iraOEGPIQ==}
+  '@tanstack/ai-gemini@0.38.0':
+    resolution: {integrity: sha512-CG3+iRSB9Qp9YvuI7oZad/OOLi26WM+lzW7CxTTF4CJPvX9VP5f1P0Nj2qkJ+qVEFk6N18uEUKw+DdNKLHOCLQ==}
     peerDependencies:
-      '@tanstack/ai': ^0.59.0
+      '@tanstack/ai': ^0.69.0
 
-  '@tanstack/ai-mcp@0.4.6':
-    resolution: {integrity: sha512-ycVrXeCvXJdzIx11CG+6NId+3QiXAAhUDGlfSJH0Nk9P4wO7O/QnLJUPvfZ+MMDxjCV/+u3/UvWj9QWF0qiXNA==}
+  '@tanstack/ai-mcp@0.9.0':
+    resolution: {integrity: sha512-E8HNsIxgNDuIx06ExNVbx902gbJJu/lmDuW+FDpqF0XGA/p/vjsYgIi+RCUcF5/AFyPI69m1/1x8QlUMLCX95A==}
     hasBin: true
 
-  '@tanstack/ai-openai@0.23.2':
-    resolution: {integrity: sha512-NfOVi+4CX+oCZSzDB9p8RQmEI8Pzb9Bo/i1PsE9H2k8jLOav2TpC44ucLaqWxr4q44lJg/DNIK3HvFSi41bHBw==}
+  '@tanstack/ai-openai@0.30.0':
+    resolution: {integrity: sha512-LZPs6jmWh+nlvYdHTS4bOhA+0qGZpYatuEdTkIqF9W+p9C86spDUhoaEsSXimBbd+mL1RTqahUIHrsAwyNSeSA==}
     peerDependencies:
-      '@tanstack/ai': ^0.59.0
+      '@tanstack/ai': ^0.69.0
 
-  '@tanstack/ai-utils@0.4.1':
-    resolution: {integrity: sha512-B3PGn2WYiRtivZCt7MUN2iXeoK9fwZhgdbrPIz5hPqVR8r8sNDZMmMqtiOkp7sxzPvVlCBItFVHw7QpZ9g6e9w==}
+  '@tanstack/ai-utils@0.4.2':
+    resolution: {integrity: sha512-ucSgSK9kLloInqr/7s0VZlp1IFtbpgPnskISvnLXti/hc8koqXc4Zv9pfTTc8V80WzIKYWMf+ZgSIDeFM50eCw==}
 
-  '@tanstack/ai-vue@0.24.4':
-    resolution: {integrity: sha512-8zzeck1ZPs+xQ5Vc3Dv3kp4kEjzmo1XP2A2Ox2JnxFapZPLwDo0CqwYxgl6KXKt6Pmo06I568X6UjNKMzEy09g==}
+  '@tanstack/ai-vue@0.26.4':
+    resolution: {integrity: sha512-pUSTY6NG4IuwNvZJSigR/ns/LMoV0kYQkJBBsyqo+prR9Uaqmx7Z052sIGK+aOtCFzPXMckskcQwpJ8sGE2P+w==}
     peerDependencies:
-      '@tanstack/ai': ^0.59.0
+      '@tanstack/ai': ^0.69.0
       vue: '>=3.5.0'
 
-  '@tanstack/ai@0.58.0':
-    resolution: {integrity: sha512-8+JjYQdpU/RCrN8VguyMbkZaNODgYXxKiI2ZVuXfpMq6UL/Dp5pHk3MJH/eaiYOyij/ZALbQHmXr81pStv14Yw==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@opentelemetry/api': '>=1.9.0'
-    peerDependenciesMeta:
-      '@opentelemetry/api':
-        optional: true
-
-  '@tanstack/ai@0.59.0':
-    resolution: {integrity: sha512-58hrSqaZmB6XooevPWlzEqTu0eBJSa7UGXVjFhtRJzJKgoA/uhRoUAAoKvXXWLB4T8NdojoqBgoovdQOmpVfRw==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@opentelemetry/api': '>=1.9.0'
-    peerDependenciesMeta:
-      '@opentelemetry/api':
-        optional: true
-
-  '@tanstack/ai@0.61.0':
-    resolution: {integrity: sha512-9CHWeai5sFGkKZj/P3gS2yi8ccQerdMnlmWULS2nlBnSd0v4v3AKE9bC2AuiCJx7RXvsExvSH7GyO/Ayg5k3Rg==}
+  '@tanstack/ai@0.69.0':
+    resolution: {integrity: sha512-Y018M4Cg3LPr1meRoVG/ePDB1mdazL9cPBA7bnm8WJm2LT0cN2LoUEXRimKSZjyYY7G+9BtQeNiKlaLJkbqHKQ==}
     engines: {node: '>=18'}
     peerDependencies:
       '@opentelemetry/api': '>=1.9.0'
@@ -1533,20 +1516,20 @@ packages:
       react:
         optional: true
 
-  '@tanstack/openai-base@0.10.16':
-    resolution: {integrity: sha512-NLsrAlQD70aN2uJPRDpXtXaeOwxJC4ikUWY6tb1nV3Vwxs0JoSbttHB3l9pxGmzpYC0JfEkUKoQ4oshlPhtzrg==}
+  '@tanstack/openai-base@0.14.0':
+    resolution: {integrity: sha512-Uw6oo0COZJbCPKGKJB2RAEu+6X0B7CWLlEHo/fpYfSPEQ9dRDTB5c8yYkqqkiAa56uMj/9rJg0awfWNuw5O1bg==}
     peerDependencies:
-      '@tanstack/ai': ^0.59.0
+      '@tanstack/ai': ^0.69.0
 
   '@tanstack/store@0.11.2':
     resolution: {integrity: sha512-sJ4mjol8uQsHV0gOJzzjwXfh2Fwm+Sz0+8deqiTm4jGbMdjzNSW+xZCFm0kUa870uhd8yi+DpKnZb5Kc4apa0Q==}
 
-  '@tanstack/table-core@9.2.8':
-    resolution: {integrity: sha512-M4D6fY5jnc7z7TaoD3Pjvz5R+8MbhzCGYdkcFf2T1AgjigwLinvFWZh6mtqfN016A7yGIroOL0GiTlVGsTh6Vg==}
+  '@tanstack/table-core@9.3.1':
+    resolution: {integrity: sha512-zQvlxSNi2qGM3L4jh85Z6hqMfdIR5qOfD9KHOU32nuKFJGN0RlJ7UvV1lsPb1fPVhpFYI0VP3jJGxLdLDpTKjQ==}
     engines: {node: '>=20'}
 
-  '@tanstack/vue-table@9.2.8':
-    resolution: {integrity: sha512-1X/hstF4Il82jCpel5Ew1CSUSeMLxf+KkQLJVQ2GIsL9VVV2FuwtlfcvEBhTq7QrEDcz8LNEEQEugYEUAtztvQ==}
+  '@tanstack/vue-table@9.3.1':
+    resolution: {integrity: sha512-7z7nS4UP91rLZ01suGxQBT611ogfBrs7/E+lsKeYS9XdHSRUAzclFvQ4B10F0bC/Q8BrzgXiNH3QzumK7b0Tow==}
     engines: {node: '>=20'}
     peerDependencies:
       vue: '>=3.2'
@@ -2499,6 +2482,9 @@ packages:
     resolution: {integrity: sha512-7MptL8U0cqcFdzIzwOTHoilX9x5BrNqye7Z/LuC7kCMRio1EMSyqRK3BEAUD7sXRq4iT4AzTVuZdhgQ2TCvYLg==}
     engines: {node: '>=8.6.0'}
 
+  fast-json-patch@3.1.1:
+    resolution: {integrity: sha512-vf6IHUX2SBcA+5/+4883dsIjpBTqmfBjmYiWK1savxQmFk4JfBMLa7ynTYOs1Rolp/T1betJxHiGD3g1Mn8lUQ==}
+
   fast-npm-meta@2.2.0:
     resolution: {integrity: sha512-99jPl8JkCSCa4VlboNU1XuL98ijm74Pm9CGo6H4BoMVoVh1uhguQcvwLgXDT8Vkl2qj/UEQ0J9gD8beHjTFk1w==}
     hasBin: true
@@ -3302,13 +3288,15 @@ packages:
     resolution: {integrity: sha512-++Zlftm0kVLPmzC06t6epuWmcRMDbI4z5P3NNX979WA/k23+NtSOynEGzsVfZwguKw2mi5umVgnBlJQMwRz4Pg==}
     engines: {node: '>=20'}
 
-  openai@6.49.0:
-    resolution: {integrity: sha512-aYCc0C6L864eR6WSYIwQGyXriw/nIyZx0ObvhzOEVuk0zoBDpynjSbrionWI7q65B5H8jJX0DXR9snEzM6bfPg==}
+  openai@7.38.0:
+    resolution: {integrity: sha512-Ef+YyIeoiisZLP/tV4F4/RieJAl4OEJTyJg6gV0AXOb0T9CDkvYJoU224OY5CTmQ4zDJeku4jEHjz2b3/6Ndhw==}
+    engines: {node: '>=22.0.0'}
     peerDependencies:
       '@aws-sdk/credential-provider-node': '>=3.972.0 <4'
       '@smithy/hash-node': '>=4.3.0 <5'
       '@smithy/signature-v4': '>=5.4.0 <6'
-      ws: ^8.18.0
+      undici: '>=5 <9'
+      ws: ^8.21.0
       zod: ^3.25 || ^4.0
     peerDependenciesMeta:
       '@aws-sdk/credential-provider-node':
@@ -3316,6 +3304,8 @@ packages:
       '@smithy/hash-node':
         optional: true
       '@smithy/signature-v4':
+        optional: true
+      undici:
         optional: true
       ws:
         optional: true
@@ -4468,10 +4458,6 @@ packages:
 
 snapshots:
 
-  '@ag-ui/core@0.1.1-canary.beta.0(zod@4.6.5)':
-    optionalDependencies:
-      zod: 4.6.5
-
   '@ag-ui/core@1.0.0(zod@4.6.5)':
     optionalDependencies:
       zod: 4.6.5
@@ -4864,6 +4850,7 @@ snapshots:
   '@hono/node-server@2.1.1(hono@4.13.9)':
     dependencies:
       hono: 4.13.9
+    optional: true
 
   '@ioredis/commands@1.10.0': {}
 
@@ -4933,6 +4920,20 @@ snapshots:
       - encoding
       - supports-color
 
+  '@modelcontextprotocol/client@2.3.1':
+    dependencies:
+      '@modelcontextprotocol/core': 2.3.1
+      cross-spawn: 7.0.6
+      eventsource: 3.0.7
+      eventsource-parser: 3.1.1
+      jose: 6.2.12
+      pkce-challenge: 5.0.1
+      zod: 4.6.5
+
+  '@modelcontextprotocol/core@2.3.1':
+    dependencies:
+      zod: 4.6.5
+
   '@modelcontextprotocol/sdk@1.30.1(supports-color@10.2.2)(zod@4.6.5)':
     dependencies:
       '@hono/node-server': 2.1.1(hono@4.13.9)
@@ -4954,6 +4955,12 @@ snapshots:
       zod-to-json-schema: 3.25.2(zod@4.6.5)
     transitivePeerDependencies:
       - supports-color
+    optional: true
+
+  '@modelcontextprotocol/server@2.3.1':
+    dependencies:
+      '@modelcontextprotocol/core': 2.3.1
+      zod: 4.6.5
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     optional: true
@@ -5728,28 +5735,24 @@ snapshots:
       tailwindcss: 4.3.3
       vite: 8.3.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)
 
-  '@tanstack/ai-client@0.34.0(zod@4.6.5)':
+  '@tanstack/ai-client@0.39.3(zod@4.6.5)':
     dependencies:
-      '@tanstack/ai': 0.59.0(zod@4.6.5)
-      '@tanstack/ai-event-client': 0.12.1
-      '@tanstack/ai-utils': 0.4.1
+      '@tanstack/ai': 0.69.0(zod@4.6.5)
+      '@tanstack/ai-event-client': 0.13.1
+      '@tanstack/ai-utils': 0.4.2
     transitivePeerDependencies:
       - '@opentelemetry/api'
       - zod
 
-  '@tanstack/ai-event-client@0.12.1':
+  '@tanstack/ai-event-client@0.13.1':
     dependencies:
       '@tanstack/devtools-event-client': 0.4.4
 
-  '@tanstack/ai-event-client@0.13.0':
-    dependencies:
-      '@tanstack/devtools-event-client': 0.4.4
-
-  '@tanstack/ai-gemini@0.32.1(@modelcontextprotocol/sdk@1.30.1(supports-color@10.2.2)(zod@4.6.5))(@tanstack/ai@0.58.0(zod@4.6.5))(supports-color@10.2.2)':
+  '@tanstack/ai-gemini@0.38.0(@modelcontextprotocol/sdk@1.30.1(supports-color@10.2.2)(zod@4.6.5))(@tanstack/ai@0.69.0(zod@4.6.5))(supports-color@10.2.2)':
     dependencies:
       '@google/genai': 2.24.0(@modelcontextprotocol/sdk@1.30.1(supports-color@10.2.2)(zod@4.6.5))(supports-color@10.2.2)
-      '@tanstack/ai': 0.58.0(zod@4.6.5)
-      '@tanstack/ai-utils': 0.4.1
+      '@tanstack/ai': 0.69.0(zod@4.6.5)
+      '@tanstack/ai-utils': 0.4.2
       partial-json: 0.1.7
     transitivePeerDependencies:
       - '@modelcontextprotocol/sdk'
@@ -5757,35 +5760,36 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@tanstack/ai-mcp@0.4.6(supports-color@10.2.2)(zod@4.6.5)':
+  '@tanstack/ai-mcp@0.9.0(zod@4.6.5)':
     dependencies:
-      '@modelcontextprotocol/sdk': 1.30.1(supports-color@10.2.2)(zod@4.6.5)
-      '@tanstack/ai': 0.61.0(zod@4.6.5)
+      '@modelcontextprotocol/client': 2.3.1
+      '@modelcontextprotocol/server': 2.3.1
+      '@tanstack/ai': 0.69.0(zod@4.6.5)
+      jose: 6.2.12
     transitivePeerDependencies:
-      - '@cfworker/json-schema'
       - '@opentelemetry/api'
-      - supports-color
       - zod
 
-  '@tanstack/ai-openai@0.23.2(@tanstack/ai@0.58.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5)':
+  '@tanstack/ai-openai@0.30.0(@tanstack/ai@0.69.0(zod@4.6.5))(undici@8.11.2)(ws@8.21.3)(zod@4.6.5)':
     dependencies:
-      '@tanstack/ai': 0.58.0(zod@4.6.5)
-      '@tanstack/ai-utils': 0.4.1
-      '@tanstack/openai-base': 0.10.16(@tanstack/ai@0.58.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5)
-      openai: 6.49.0(ws@8.21.3)(zod@4.6.5)
+      '@tanstack/ai': 0.69.0(zod@4.6.5)
+      '@tanstack/ai-utils': 0.4.2
+      '@tanstack/openai-base': 0.14.0(@tanstack/ai@0.69.0(zod@4.6.5))(undici@8.11.2)(ws@8.21.3)(zod@4.6.5)
+      openai: 7.38.0(undici@8.11.2)(ws@8.21.3)(zod@4.6.5)
     transitivePeerDependencies:
       - '@aws-sdk/credential-provider-node'
       - '@smithy/hash-node'
       - '@smithy/signature-v4'
+      - undici
       - ws
       - zod
 
-  '@tanstack/ai-utils@0.4.1': {}
+  '@tanstack/ai-utils@0.4.2': {}
 
-  '@tanstack/ai-vue@0.24.4(@tanstack/ai@0.58.0(zod@4.6.5))(vue@3.5.43)(zod@4.6.5)':
+  '@tanstack/ai-vue@0.26.4(@tanstack/ai@0.69.0(zod@4.6.5))(vue@3.5.43)(zod@4.6.5)':
     dependencies:
-      '@tanstack/ai': 0.58.0(zod@4.6.5)
-      '@tanstack/ai-client': 0.34.0(zod@4.6.5)
+      '@tanstack/ai': 0.69.0(zod@4.6.5)
+      '@tanstack/ai-client': 0.39.3(zod@4.6.5)
       '@tanstack/markdown': 0.0.13
       vue: 3.5.43
     transitivePeerDependencies:
@@ -5794,32 +5798,13 @@ snapshots:
       - react
       - zod
 
-  '@tanstack/ai@0.58.0(zod@4.6.5)':
-    dependencies:
-      '@ag-ui/core': 0.1.1-canary.beta.0(zod@4.6.5)
-      '@standard-schema/spec': 1.1.0
-      '@tanstack/ai-event-client': 0.12.1
-      '@tanstack/ai-utils': 0.4.1
-      partial-json: 0.1.7
-    transitivePeerDependencies:
-      - zod
-
-  '@tanstack/ai@0.59.0(zod@4.6.5)':
+  '@tanstack/ai@0.69.0(zod@4.6.5)':
     dependencies:
       '@ag-ui/core': 1.0.0(zod@4.6.5)
       '@standard-schema/spec': 1.1.0
-      '@tanstack/ai-event-client': 0.12.1
-      '@tanstack/ai-utils': 0.4.1
-      partial-json: 0.1.7
-    transitivePeerDependencies:
-      - zod
-
-  '@tanstack/ai@0.61.0(zod@4.6.5)':
-    dependencies:
-      '@ag-ui/core': 1.0.0(zod@4.6.5)
-      '@standard-schema/spec': 1.1.0
-      '@tanstack/ai-event-client': 0.13.0
-      '@tanstack/ai-utils': 0.4.1
+      '@tanstack/ai-event-client': 0.13.1
+      '@tanstack/ai-utils': 0.4.2
+      fast-json-patch: 3.1.1
       partial-json: 0.1.7
     transitivePeerDependencies:
       - zod
@@ -5828,28 +5813,29 @@ snapshots:
 
   '@tanstack/markdown@0.0.13': {}
 
-  '@tanstack/openai-base@0.10.16(@tanstack/ai@0.58.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5)':
+  '@tanstack/openai-base@0.14.0(@tanstack/ai@0.69.0(zod@4.6.5))(undici@8.11.2)(ws@8.21.3)(zod@4.6.5)':
     dependencies:
-      '@tanstack/ai': 0.58.0(zod@4.6.5)
-      '@tanstack/ai-utils': 0.4.1
-      openai: 6.49.0(ws@8.21.3)(zod@4.6.5)
+      '@tanstack/ai': 0.69.0(zod@4.6.5)
+      '@tanstack/ai-utils': 0.4.2
+      openai: 7.38.0(undici@8.11.2)(ws@8.21.3)(zod@4.6.5)
     transitivePeerDependencies:
       - '@aws-sdk/credential-provider-node'
       - '@smithy/hash-node'
       - '@smithy/signature-v4'
+      - undici
       - ws
       - zod
 
   '@tanstack/store@0.11.2': {}
 
-  '@tanstack/table-core@9.2.8':
+  '@tanstack/table-core@9.3.1':
     dependencies:
       '@tanstack/store': 0.11.2
 
-  '@tanstack/vue-table@9.2.8(vue@3.5.43)':
+  '@tanstack/vue-table@9.3.1(vue@3.5.43)':
     dependencies:
       '@tanstack/store': 0.11.2
-      '@tanstack/table-core': 9.2.8
+      '@tanstack/table-core': 9.3.1
       vue: 3.5.43
 
   '@types/better-sqlite3@9.6.0':
@@ -6069,6 +6055,7 @@ snapshots:
     dependencies:
       mime-types: 3.0.2
       negotiator: 1.1.0
+    optional: true
 
   acorn-import-attributes@1.9.5(acorn@8.18.0):
     dependencies:
@@ -6081,6 +6068,7 @@ snapshots:
   ajv-formats@3.0.1(ajv@8.20.0):
     optionalDependencies:
       ajv: 8.20.0
+    optional: true
 
   ajv@8.20.0:
     dependencies:
@@ -6088,6 +6076,7 @@ snapshots:
       fast-uri: 3.1.8
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
+    optional: true
 
   ansi-regex@5.0.1: {}
 
@@ -6220,6 +6209,7 @@ snapshots:
       type-is: 2.1.0
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   boolbase@1.0.0: {}
 
@@ -6258,7 +6248,8 @@ snapshots:
     dependencies:
       run-applescript: 7.1.0
 
-  bytes@3.1.2: {}
+  bytes@3.1.2:
+    optional: true
 
   c12@3.3.4(magicast@0.5.5):
     dependencies:
@@ -6283,11 +6274,13 @@ snapshots:
     dependencies:
       es-errors: 1.3.0
       function-bind: 1.1.2
+    optional: true
 
   call-bound@1.0.4:
     dependencies:
       call-bind-apply-helpers: 1.0.2
       get-intrinsic: 1.3.0
+    optional: true
 
   caniuse-api@4.0.0:
     dependencies:
@@ -6346,11 +6339,14 @@ snapshots:
 
   consola@3.4.2: {}
 
-  content-disposition@1.1.0: {}
+  content-disposition@1.1.0:
+    optional: true
 
-  content-type@1.0.5: {}
+  content-type@1.0.5:
+    optional: true
 
-  content-type@2.1.0: {}
+  content-type@2.1.0:
+    optional: true
 
   convert-source-map@2.0.0: {}
 
@@ -6360,9 +6356,11 @@ snapshots:
 
   cookie-es@3.1.1: {}
 
-  cookie-signature@1.2.2: {}
+  cookie-signature@1.2.2:
+    optional: true
 
-  cookie@0.7.2: {}
+  cookie@0.7.2:
+    optional: true
 
   core-util-is@1.0.3: {}
 
@@ -6370,6 +6368,7 @@ snapshots:
     dependencies:
       object-assign: 4.1.1
       vary: 1.1.2
+    optional: true
 
   crc-32@1.2.2: {}
 
@@ -6548,6 +6547,7 @@ snapshots:
       call-bind-apply-helpers: 1.0.2
       es-errors: 1.3.0
       gopd: 1.2.0
+    optional: true
 
   duplexer@0.1.2: {}
 
@@ -6584,7 +6584,8 @@ snapshots:
 
   errx@0.1.2: {}
 
-  es-define-property@1.0.1: {}
+  es-define-property@1.0.1:
+    optional: true
 
   es-errors@1.3.0: {}
 
@@ -6593,6 +6594,7 @@ snapshots:
   es-object-atoms@1.1.2:
     dependencies:
       es-errors: 1.3.0
+    optional: true
 
   esbuild@0.25.12:
     optionalDependencies:
@@ -6701,6 +6703,7 @@ snapshots:
       ip-address: 10.7.2
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   express@5.2.1(supports-color@10.2.2):
     dependencies:
@@ -6734,12 +6737,14 @@ snapshots:
       vary: 1.1.2
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   exsolve@1.1.1: {}
 
   extend@3.0.2: {}
 
-  fast-deep-equal@3.1.3: {}
+  fast-deep-equal@3.1.3:
+    optional: true
 
   fast-fifo@1.3.2: {}
 
@@ -6751,6 +6756,8 @@ snapshots:
       merge2: 1.4.1
       micromatch: 4.0.8
 
+  fast-json-patch@3.1.1: {}
+
   fast-npm-meta@2.2.0:
     dependencies:
       cac: 7.0.0
@@ -6761,7 +6768,8 @@ snapshots:
     dependencies:
       fast-string-truncated-width: 3.0.3
 
-  fast-uri@3.1.8: {}
+  fast-uri@3.1.8:
+    optional: true
 
   fast-wrap-ansi@0.2.2:
     dependencies:
@@ -6796,6 +6804,7 @@ snapshots:
       statuses: 2.0.2
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   fnv1a-64@0.1.2: {}
 
@@ -6808,7 +6817,8 @@ snapshots:
     dependencies:
       fetch-blob: 3.2.0
 
-  forwarded@0.2.0: {}
+  forwarded@0.2.0:
+    optional: true
 
   fraction.js@5.3.4: {}
 
@@ -6861,6 +6871,7 @@ snapshots:
       has-symbols: 1.1.0
       hasown: 2.0.4
       math-intrinsics: 1.1.0
+    optional: true
 
   get-port-please@3.2.0: {}
 
@@ -6868,6 +6879,7 @@ snapshots:
     dependencies:
       dunder-proto: 1.0.1
       es-object-atoms: 1.1.2
+    optional: true
 
   get-stream@8.0.1: {}
 
@@ -6923,7 +6935,8 @@ snapshots:
 
   google-logging-utils@1.1.3: {}
 
-  gopd@1.2.0: {}
+  gopd@1.2.0:
+    optional: true
 
   graceful-fs@4.2.11: {}
 
@@ -6943,13 +6956,15 @@ snapshots:
       ufo: 1.6.4
       uncrypto: 0.1.3
 
-  has-symbols@1.1.0: {}
+  has-symbols@1.1.0:
+    optional: true
 
   hasown@2.0.4:
     dependencies:
       function-bind: 1.1.2
 
-  hono@4.13.9: {}
+  hono@4.13.9:
+    optional: true
 
   hookable@5.5.3: {}
 
@@ -6979,6 +6994,7 @@ snapshots:
   iconv-lite@0.7.3:
     dependencies:
       safer-buffer: 2.1.2
+    optional: true
 
   ieee754@1.2.1: {}
 
@@ -7021,9 +7037,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ip-address@10.7.2: {}
+  ip-address@10.7.2:
+    optional: true
 
-  ipaddr.js@1.9.1: {}
+  ipaddr.js@1.9.1:
+    optional: true
 
   iron-webcrypto@1.2.1: {}
 
@@ -7058,7 +7076,8 @@ snapshots:
 
   is-path-inside@4.0.0: {}
 
-  is-promise@4.0.0: {}
+  is-promise@4.0.0:
+    optional: true
 
   is-reference@1.2.1:
     dependencies:
@@ -7100,9 +7119,11 @@ snapshots:
     dependencies:
       bignumber.js: 9.3.1
 
-  json-schema-traverse@1.0.0: {}
+  json-schema-traverse@1.0.0:
+    optional: true
 
-  json-schema-typed@8.0.2: {}
+  json-schema-typed@8.0.2:
+    optional: true
 
   json5@2.2.3: {}
 
@@ -7291,15 +7312,18 @@ snapshots:
       '@babel/types': 7.29.8
       source-map-js: 1.2.1
 
-  math-intrinsics@1.1.0: {}
+  math-intrinsics@1.1.0:
+    optional: true
 
   mdn-data@2.0.28: {}
 
   mdn-data@2.27.1: {}
 
-  media-typer@1.1.1: {}
+  media-typer@1.1.1:
+    optional: true
 
-  merge-descriptors@2.0.0: {}
+  merge-descriptors@2.0.0:
+    optional: true
 
   merge-stream@2.0.0: {}
 
@@ -7360,6 +7384,7 @@ snapshots:
   negotiator@1.1.0:
     dependencies:
       content-type: 2.1.0
+    optional: true
 
   nitropack@2.13.4(better-sqlite3@13.0.3)(drizzle-orm@1.0.0-rc.4(@types/better-sqlite3@9.6.0)(better-sqlite3@13.0.3)(zod@4.6.5))(rolldown@1.2.11)(srvx@0.11.22)(supports-color@10.2.2)(vite@8.3.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)):
     dependencies:
@@ -7667,11 +7692,13 @@ snapshots:
       pathe: 2.0.3
       tinyexec: 1.3.1
 
-  object-assign@4.1.1: {}
+  object-assign@4.1.1:
+    optional: true
 
   object-identity@0.2.3: {}
 
-  object-inspect@1.13.4: {}
+  object-inspect@1.13.4:
+    optional: true
 
   obug@2.2.1: {}
 
@@ -7692,6 +7719,7 @@ snapshots:
   once@1.4.0:
     dependencies:
       wrappy: 1.0.2
+    optional: true
 
   onetime@6.0.0:
     dependencies:
@@ -7706,8 +7734,9 @@ snapshots:
       powershell-utils: 0.2.1
       wsl-utils: 1.0.0
 
-  openai@6.49.0(ws@8.21.3)(zod@4.6.5):
+  openai@7.38.0(undici@8.11.2)(ws@8.21.3)(zod@4.6.5):
     optionalDependencies:
+      undici: 8.11.2
       ws: 8.21.3
       zod: 4.6.5
 
@@ -7789,7 +7818,8 @@ snapshots:
       lru-cache: 11.5.3
       minipass: 7.1.3
 
-  path-to-regexp@8.4.2: {}
+  path-to-regexp@8.4.2:
+    optional: true
 
   pathe@2.0.3: {}
 
@@ -8013,11 +8043,13 @@ snapshots:
     dependencies:
       forwarded: 0.2.0
       ipaddr.js: 1.9.1
+    optional: true
 
   qs@6.16.0:
     dependencies:
       es-define-property: 1.0.1
       side-channel: 1.1.1
+    optional: true
 
   quansync@0.2.11: {}
 
@@ -8033,6 +8065,7 @@ snapshots:
       http-errors: 2.0.1
       iconv-lite: 0.7.3
       unpipe: 1.0.0
+    optional: true
 
   rc9@3.1.0:
     dependencies:
@@ -8069,7 +8102,8 @@ snapshots:
     dependencies:
       redis-errors: 1.2.0
 
-  require-from-string@2.0.2: {}
+  require-from-string@2.0.2:
+    optional: true
 
   resolve-from@5.0.0: {}
 
@@ -8168,6 +8202,7 @@ snapshots:
       path-to-regexp: 8.4.2
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   run-applescript@7.1.0: {}
 
@@ -8179,7 +8214,8 @@ snapshots:
 
   safe-buffer@5.2.1: {}
 
-  safer-buffer@2.1.2: {}
+  safer-buffer@2.1.2:
+    optional: true
 
   sax@1.6.1: {}
 
@@ -8236,6 +8272,7 @@ snapshots:
     dependencies:
       es-errors: 1.3.0
       object-inspect: 1.13.4
+    optional: true
 
   side-channel-map@1.0.1:
     dependencies:
@@ -8243,6 +8280,7 @@ snapshots:
       es-errors: 1.3.0
       get-intrinsic: 1.3.0
       object-inspect: 1.13.4
+    optional: true
 
   side-channel-weakmap@1.0.2:
     dependencies:
@@ -8251,6 +8289,7 @@ snapshots:
       get-intrinsic: 1.3.0
       object-inspect: 1.13.4
       side-channel-map: 1.0.1
+    optional: true
 
   side-channel@1.1.1:
     dependencies:
@@ -8259,6 +8298,7 @@ snapshots:
       side-channel-list: 1.0.1
       side-channel-map: 1.0.1
       side-channel-weakmap: 1.0.2
+    optional: true
 
   signal-exit@3.0.7: {}
 
@@ -8460,6 +8500,7 @@ snapshots:
       content-type: 2.1.0
       media-typer: 1.1.1
       mime-types: 3.0.2
+    optional: true
 
   ufo@1.6.4: {}
 
@@ -8540,7 +8581,8 @@ snapshots:
 
   unpdf@1.8.1: {}
 
-  unpipe@1.0.0: {}
+  unpipe@1.0.0:
+    optional: true
 
   unplugin-utils@0.3.2:
     dependencies:
@@ -8613,7 +8655,8 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vary@1.1.2: {}
+  vary@1.1.2:
+    optional: true
 
   verkit@0.3.2: {}
 
@@ -8786,7 +8829,8 @@ snapshots:
       string-width: 7.2.0
       strip-ansi: 7.2.0
 
-  wrappy@1.0.2: {}
+  wrappy@1.0.2:
+    optional: true
 
   ws@8.21.3: {}
 
@@ -8834,5 +8878,6 @@ snapshots:
   zod-to-json-schema@3.25.2(zod@4.6.5):
     dependencies:
       zod: 4.6.5
+    optional: true
 
   zod@4.6.5: {}

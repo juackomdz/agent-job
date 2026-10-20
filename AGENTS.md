@@ -2,36 +2,52 @@
 
 ## Project
 
-Nuxt 4 (Vue 3 + TypeScript) job-search agent for the Chilean IT market. Vue SPA + Nitro API routes. Prompts, tool descriptions, and UI copy are in Spanish.
-
-## Notes
-
-- Never check `.env` files.
-- Required env, auto-loaded from `.env` (Nuxt in dev, drizzle-kit): `DB_FILE_NAME` (SQLite path), `NVIDIA_API`, `TAVILY_API_KEY`.
-- `pnpm fmt:check` currently fails on ~19 files (repo is not oxfmt-clean). `pnpm fmt` rewrites them (adds semicolons/trailing commas) — don't attribute that churn to your own change.
-- `pnpm lint` warnings are expected: unused `adapter` import in `server/api/chat.post.ts`, unused `id` in `server/api/test.get.ts`.
+Nuxt 4 (Vue 3 + TypeScript) job-search agent for the Chilean IT market. SSR app in `app/`, Nitro routes in `server/`, code shared by both in `shared/` (alias `#shared/*`). Prompts, tool descriptions and UI copy are in Spanish — keep it that way.
 
 ## Commands
 
-- `pnpm dev` — dev server on `localhost:3000`
-- `pnpm build` / `pnpm generate` / `pnpm preview`
-- `pnpm lint` — oxlint
-- `pnpm fmt` / `pnpm fmt:check` — oxfmt (single quotes + semicolons); also formats **Markdown**.
-- `pnpm install` — runs `nuxt prepare` via postinstall; re-run after adding modules or deps.
-- `pnpm db:generate` / `db:migrate` / `db:push` / `db:studio` — drizzle-kit.
-- **No typecheck** (vue-tsc not installed) and **no tests**.
+- `pnpm dev` — dev server on `http://localhost:3000`
+- `pnpm build` — works; run the build with `node .output/server/index.mjs`
+- `pnpm generate` / `pnpm preview` — static build / preview
+- `pnpm lint` — oxlint (currently clean, keep it clean)
+- `pnpm fmt` / `pnpm fmt:check` — oxfmt, single quotes (`.oxfmtrc.json`). **oxfmt also formats Markdown**, so `pnpm fmt` also rewrites `README.md` / `AGENTS.md`.
+- `pnpm db:push` — apply `shared/drizzle/schema.ts` to SQLite (see DB section)
+- `pnpm db:generate` / `db:migrate` / `db:studio` — drizzle-kit
+- `pnpm install` → runs `nuxt prepare` (postinstall); re-run it after adding deps or modules.
+- **No typecheck (vue-tsc is not installed) and no test suite.**
+- New native deps must be allowlisted in `allowBuilds` in `pnpm-workspace.yaml`, otherwise pnpm blocks their install scripts.
 
-## Env & SQLite
+## Env
 
-- DB is SQLite at `./test.db` (gitignored). `shared/drizzle/db.ts` lazily opens it via `useDb()` using `DB_FILE_NAME`. `drizzle.config.ts` sets `out: './drizzle'` but **no migrations are committed**; schema lives in `shared/drizzle/schema.ts` and is applied with `pnpm db:push`. Fresh clone: run `db:push` first.
-- Native deps (`better-sqlite3`, esbuild, `@google/genai`, `@openrouter/sdk`) need entries in `pnpm-workspace.yaml` `allowBuilds` or pnpm blocks their install scripts — add new native deps there.
+`.env` is gitignored and holds secrets — don't read it into the transcript and never commit it. `.env.example` is the template.
+
+| var                   | maps to                      | used by                                                                                                                  |
+| --------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `DB_FILE_NAME`        | `process.env`                | SQLite file path (`*.db` is gitignored)                                              |
+| `NUXT_TAVILY_API_KEY` | `runtimeConfig.tavilyApiKey` | Tavily MCP endpoint                                                                                                      |
+| `NUXT_BASE_URL`       | `runtimeConfig.baseUrl`      | OpenAI-compatible endpoint  |
+| `NUXT_MODEL_API_KEY`  | `runtimeConfig.modelApiKey`  | model auth                                                                                                               |
+| `NUXT_MODEL`          | `runtimeConfig.model`        | model id                                                                                                                 |
+
+- Nuxt CLI loads `.env` in dev/build and drizzle-kit loads it too (dotenv dep). The built server only sees the real process env → export the vars before `node .output/server/index.mjs`.
+- `server/ai/utils/adapter.ts` calls `useRuntimeConfig()` at module scope → config is frozen at import time; restart the dev server after editing `.env`.
+
+## Database (SQLite + drizzle)
+
+- `shared/drizzle/db.ts` — `useDb()` lazy singleton over `better-sqlite3` (WAL, foreign keys on); creates the parent dir of `DB_FILE_NAME` on first use.
+- `server/ai/utils/tools.ts` calls `useDb()` at **module scope** → importing that module opens the DB, so a missing/invalid `DB_FILE_NAME` breaks `/api/chat` at import time, not only when a tool touches the DB.
+- **No migrations are committed**: `drizzle.config.ts` points `out: './drizzle'` but that folder doesn't exist. Edit `shared/drizzle/schema.ts`, then run `pnpm db:push` (it asks for confirmation before applying). drizzle-kit reads `process.env.DB_FILE_NAME` directly, not runtimeConfig.
+- drizzle-orm is `1.0.0-rc.4` → use the new API (`drizzle({ client })`, `int().primaryKey()`, `text({ length })`, `sqliteTable(name, cols, (t) => [primaryKey(...), index(...)])`). v0 snippets from docs/blogs won't compile.
+- `shared/drizzle/repository.ts` — `saveCvProfile()` writes `cv_profiles` plus lowercased/deduped `cv_skills` in one transaction; `getCvProfile()` returns the latest row by `createdAt`.
 
 ## Architecture
 
-- `app/` SPA, components auto-imported. `pages/chat.vue` → `Test.vue` (chat via `@tanstack/ai-vue` `useChat(fetchServerSentEvents('/api/chat'))`); `pages/uploadcv.vue` → `Upload.vue` (client-side text parse of txt/md, then feeds the CV text into `/api/chat`; PDFs there are only read as text and usually fail); `pages/upload-test.vue` POSTs a PDF form to `/api/cv`; `index.vue` is a stub.
-- `server/api/chat.post.ts` — POST `/api/chat`, SSE via `toServerSentEventsResponse`. Live path: NVIDIA `openaiCompatible` (model `openai/gpt-oss-20b`, `https://integrate.api.nvidia.com/v1`) + Tavily **MCP** client — `tavily_search`/`tavily_extract` are MCP tools, not local ones. Its `adapter` import is dead.
-- `server/api/cv.post.ts` — POST `/api/cv`, multipart PDF only (≤5 MB) → extracts text with `unpdf` → structured `CvSchema` completion through `server/ai/utils/adapter.ts` (`openaiCompatibleText` against **local llama.cpp at `http://localhost:8080/v1`**) → `saveCvProfile`. This route needs that local server running (unlike `/api/chat`).
-- `server/api/test.get.ts` — dev helper returning `get_data` output.
-- `server/ai/utils/tools.ts` — `toolDefinition`s (zod is the contract): `get_data` (`get_cv_data`, reads latest CV profile) and `save_job` (`save_job_tool`, inserts into `offers`, unique `url`, `onConflictDoNothing`, match 0–100). Only these two are passed to `chat()`; `save_profile` is defined but unwired. `getparsedcv*`/`test_tool` are gone.
-- `server/ai/utils/system.ts` — static Spanish prompt; CV data comes from the DB via `get_cv_data`. Root `cv.json` is tracked (real candidate PII) but **not imported anywhere**.
-- `shared/` — Nuxt 4 built-in shared dir, alias `#shared/*`: `drizzle/*` (db, schema, repository) and `cvSchema.ts` (`CvSchema`/`CvProfile`). `types.ts` (Tavily REST types) is unused. drizzle-orm is `1.0.0-rc` — use the new API (`drizzle({ client })`, `int().primaryKey()`), not v0 patterns.
+- `app/` is the Nuxt 4 `srcDir`. Components are auto-imported. `app/app.vue` wraps every route in the `dashboard` layout (sidebar: Panel / Chat / Subir CV / Todas tus ofertas). Tailwind v4 + daisyUI live in `app/assets/css/main.css` (theme `garden` default plus a custom `claro` theme).
+- Pages: `index.vue` (dashboard: stats + top offers, SSR `useFetch`), `chat.vue` → `ChatPanel.vue` (SSE chat via `@tanstack/ai-vue` `useChat({ connection: fetchServerSentEvents('/api/chat') })`), `subir-cv.vue` (PDF upload form), `ofertas.vue` (full table + pagination).
+- `app/composables/useOffersTable.ts` owns the TanStack Table v9 setup (sort by `match` desc, pagination); pages just wire `OffersTable` + `Pagination`.
+- `server/api/chat.post.ts` — POST `/api/chat` (body `{ messages }`) → SSE via `toServerSentEventsResponse`. The model comes from `server/ai/utils/adapter.ts`; `adapter` is a **factory** (`adapter(modelName)` selects the model from the `models` tuple). Search tools come from the **Tavily MCP server** (`createMCPClient`, http transport `https://mcp.tavily.com/mcp/?tavilyApiKey=…`) — remote MCP tools, not local functions. Wired local tools: `get_cv_data` (read the latest CV profile) and `save_job_tool` (insert into `offers`, unique `url`, `onConflictDoNothing`, `match` 0–100).
+- `server/ai/utils/tools.ts` — the zod schemas are the tool contract. `save_profile` is defined but **not passed to `chat()`** → dead code unless you wire it.
+- `server/ai/utils/system.ts` — the Spanish system prompt; it is the spec for how the agent must use the tools (search → extract → score → save, only `match >= 60`). Update it whenever tool behaviour changes.
+- `server/api/cv.post.ts` — POST `/api/cv`: multipart field name **`file`**, PDF only (415 otherwise), ≤ 5 MB, text extracted with `unpdf`, structured output validated by `CvSchema` → `saveCvProfile`. Requires a provider that supports structured output.
+- `server/api/offers.get.ts` — GET `/api/offers?limit=N` (limit optional) → rows ordered by id desc.
+- `shared/cvSchema.ts` — zod `CvSchema` + `CvProfile` type, used by both the CV extraction and the `cv_profiles.data` JSON column. `shared/types.ts` holds the `Offer` type used by the frontend table.

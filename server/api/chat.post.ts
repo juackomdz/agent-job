@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
 
   const { messages } = await readBody(event);
-  const abortController = new AbortController()
+  const abortController = new AbortController();
 
   try {
     const mcp = await createMCPClient({

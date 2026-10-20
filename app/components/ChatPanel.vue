@@ -15,7 +15,7 @@ const input = ref('');
 const scrollRef = ref<HTMLElement | null>(null);
 
 const { messages, sendMessage, isLoading, stop, error } = useChat({
-  connection: fetchServerSentEvents('/api/chat')
+  connection: fetchServerSentEvents('/api/chat'),
 });
 
 const canSend = computed(() => input.value.trim().length > 0 && !isLoading.value);

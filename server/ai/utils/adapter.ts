@@ -5,5 +5,5 @@ const config = useRuntimeConfig();
 export const adapter = openaiCompatible({
   baseURL: config.baseUrl,
   apiKey: config.modelApiKey,
-  models: [config.model]
-})
+  models: [config.model],
+});

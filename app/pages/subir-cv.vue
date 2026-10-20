@@ -102,9 +102,7 @@ const subir = async () => {
     </div>
 
     <div v-if="estado === 'listo' && resultado" role="alert" class="alert alert-success">
-      <span class="text-sm">
-        {{ MENSAJES.listo }}.
-      </span>
+      <span class="text-sm"> {{ MENSAJES.listo }}. </span>
     </div>
 
     <div v-if="estado === 'error'" role="alert" class="alert alert-error">

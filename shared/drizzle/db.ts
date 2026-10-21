@@ -6,7 +6,7 @@ import Database from 'better-sqlite3';
 function createDb() {
   mkdirSync(dirname(process.env.DB_FILE_NAME!), { recursive: true });
 
-  const sqlite = new Database(process.env.DB_FILE_NAME!);
+  const sqlite = new Database(process.env.DB_FILE_NAME! || './agent-job.db');
   sqlite.pragma('journal_mode = WAL');
   sqlite.pragma('foreign_keys = ON');
   return drizzle({ client: sqlite });

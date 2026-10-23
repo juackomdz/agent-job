@@ -8,12 +8,15 @@ import {
 import { createMCPClient } from '@tanstack/ai-mcp';
 import { save_job, get_data } from '../ai/utils/tools';
 import { system_prompt } from '../ai/utils/system';
-import { adapter } from '../ai/utils/adapter';
+import { resolveAdapter } from '../ai/utils/providers';
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
 
-  const { messages } = await readBody(event);
+  const body = await readBody(event);
+  const { messages } = body;
+  const requestedModel = body?.forwardedProps?.model ?? body?.data?.model;
+  const adapter = resolveAdapter(typeof requestedModel === 'string' ? requestedModel : undefined);
   const abortController = new AbortController();
 
   try {
@@ -27,7 +30,7 @@ export default defineEventHandler(async (event) => {
 
     const stream = chat({
       messages,
-      adapter: adapter(config.model),
+      adapter,
       systemPrompts: [system_prompt],
       mcp: {
         clients: [mcp],
@@ -38,19 +41,7 @@ export default defineEventHandler(async (event) => {
         untilFinishReason(['stop', 'length']),
       ]),
       abortController,
-      middleware: [
-        {
-          name: 'token_usage',
-          onUsage: (_ctx, usage) => {
-            console.log(`input: ${usage.promptTokens}`);
-            console.log(`output: ${usage.completionTokens}`);
-            console.log(`total de tokens: ${usage.totalTokens}`);
-          },
-          onError(_ctx, info) {
-            console.log(`error: ${info.error}`);
-          },
-        },
-      ],
+      middleware: [],
     });
 
     return toServerSentEventsResponse(stream, { abortController });

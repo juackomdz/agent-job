@@ -18,13 +18,16 @@ const { messages, sendMessage, isLoading, stop, error } = useChat({
   connection: fetchServerSentEvents('/api/chat'),
 });
 
+const { selected } = useModelSelection();
+
 const canSend = computed(() => input.value.trim().length > 0 && !isLoading.value);
 
 async function handleSubmit() {
   if (!canSend.value) return;
   const content = input.value.trim();
+  const model = selected.value;
   input.value = '';
-  await sendMessage(content);
+  await sendMessage(content, model ? { body: { model } } : undefined);
 }
 
 function textOf(message: UIMessage): string {
@@ -73,20 +76,23 @@ watch(messages, async () => {
       <p v-if="error" class="px-4 pt-2 text-center text-xs text-error">
         {{ error.message }}
       </p>
-      <form class="flex gap-2 border-t border-base-200 p-3" @submit.prevent="handleSubmit">
-        <input
-          v-model="input"
-          :placeholder="placeholder"
-          class="input input-bordered w-full"
-          :disabled="isLoading"
-        />
-        <div v-if="!isLoading">
-          <button type="submit" class="btn btn-primary" :disabled="!canSend">Enviar</button>
-        </div>
-        <div v-else>
-          <button class="btn btn-primary" @click="stop()">
-            <Square />
-          </button>
+      <form class="flex flex-col gap-2 border-t border-base-200 p-3" @submit.prevent="handleSubmit">
+        <ModelSelect :disabled="isLoading" />
+        <div class="flex gap-2">
+          <input
+            v-model="input"
+            :placeholder="placeholder"
+            class="input input-bordered w-full"
+            :disabled="isLoading"
+          />
+          <div v-if="!isLoading">
+            <button type="submit" class="btn btn-primary" :disabled="!canSend">Enviar</button>
+          </div>
+          <div v-else>
+            <button class="btn btn-primary" @click="stop()">
+              <Square />
+            </button>
+          </div>
         </div>
       </form>
     </div>

@@ -1,14 +1,12 @@
 import { extractText } from 'unpdf';
 import { chat } from '@tanstack/ai';
-import { adapter } from '../ai/utils/adapter';
+import { resolveAdapter } from '../ai/utils/providers';
 import { saveCvProfile } from '#shared/drizzle/repository';
 import { CvSchema } from '#shared/cvSchema';
 
 const MAX_SIZE_BYTES = 5 * 1024 * 1024;
 
 export default defineEventHandler(async (event) => {
-  const { model } = useRuntimeConfig();
-
   const formData = await readMultipartFormData(event);
 
   if (!formData) {
@@ -19,6 +17,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const file = formData.find((f) => f.name === 'file');
+  const modelField = formData.find((f) => f.name === 'model');
 
   if (!file || !file.data) {
     throw createError({
@@ -43,6 +42,8 @@ export default defineEventHandler(async (event) => {
     });
   }
 
+  const adapter = resolveAdapter(modelField?.data?.toString('utf8'));
+
   let text: string;
   let totalPages: number;
 
@@ -66,7 +67,7 @@ export default defineEventHandler(async (event) => {
 
   const profile = await chat({
     stream: false,
-    adapter: adapter(model),
+    adapter,
     outputSchema: CvSchema,
     messages: [
       {

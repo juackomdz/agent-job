@@ -16,6 +16,7 @@ const file = ref<File | null>(null);
 const estado = ref<Estado>('idle');
 const errorMensaje = ref('');
 const resultado = ref<{ id: number; totalPages: number } | null>(null);
+const { selected } = useModelSelection();
 
 const isProcesando = computed(
   () => estado.value !== 'idle' && estado.value !== 'listo' && estado.value !== 'error',
@@ -48,6 +49,7 @@ const subir = async () => {
 
   const formData = new FormData();
   formData.append('file', file.value);
+  if (selected.value) formData.append('model', selected.value);
 
   try {
     estado.value = 'extrayendo';
@@ -90,6 +92,7 @@ const subir = async () => {
         @change="handleFile"
       />
       <p>Solo archivos .pdf - Max. 5 mb</p>
+      <ModelSelect :disabled="isProcesando" />
       <button class="btn btn-primary btn-sm" :disabled="isProcesando || !file">
         <span v-if="isProcesando" class="loading loading-spinner loading-xs" />
         {{ isProcesando ? 'Procesando…' : 'Subir' }}

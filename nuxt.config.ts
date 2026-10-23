@@ -10,8 +10,13 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   runtimeConfig: {
     tavilyApiKey: '',
+    openaiApiKey: '',
+    openaiModels: '',
+    anthropicApiKey: '',
+    anthropicModels: '',
     baseUrl: '',
     modelApiKey: '',
     model: '',
+    defaultModel: '',
   },
 });

@@ -7,7 +7,7 @@ interface ModelsResponse {
 }
 
 export function useModelSelection() {
-  const { data } = useFetch<ModelsResponse>('/api/models', { key: 'models' });
+  const { data, pending } = useFetch<ModelsResponse>('/api/models', { key: 'models' });
 
   const saved = useCookie<string | null>('ai-model', {
     default: () => null,
@@ -43,5 +43,5 @@ export function useModelSelection() {
     }));
   });
 
-  return { models, groups, selected };
+  return { models, groups, selected, pending };
 }

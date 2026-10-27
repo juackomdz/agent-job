@@ -18,7 +18,7 @@ Puedes conseguir tu api key en https://www.tavily.com
 
 Copia el .env.example y renombralo a .env y coloca tus apis de tavily, nombre de tu bd de sqlite, url del endpoint de tu servicio de llm.
 
-*Nota:* Si usas un modelo local, puedes colocar cualquier texto en NUXT_MODEL_API_KEY y NUXT_MODEL, pero debe contener un string para que funcione.
+*Nota:* Si usas un modelo local (ollama, llama.cpp), puedes colocar cualquier texto en NUXT_MODEL_API_KEY; los modelos se leen desde `{NUXT_BASE_URL}/models`.
 
 
 ---

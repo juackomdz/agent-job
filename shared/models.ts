@@ -1,7 +1,6 @@
 export type ProviderId = 'openai' | 'anthropic' | 'compatible';
 
 export interface ModelOption {
-  /** Identificador único que viaja al servidor: `proveedor:modelo`. */
   id: string;
   provider: ProviderId;
   model: string;

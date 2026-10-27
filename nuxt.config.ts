@@ -11,12 +11,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     tavilyApiKey: '',
     openaiApiKey: '',
-    openaiModels: '',
     anthropicApiKey: '',
-    anthropicModels: '',
     baseUrl: '',
     modelApiKey: '',
-    model: '',
     defaultModel: '',
   },
 });

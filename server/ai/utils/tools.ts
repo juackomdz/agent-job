@@ -38,7 +38,7 @@ export const save_job = toolDefinition({
             .min(0)
             .max(100)
             .transform((v) => Math.round(v)),
-          url: z.string().url().max(500).trim(),
+          url: z.url().max(500).trim(),
         }),
       )
       .min(1)

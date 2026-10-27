@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const adapter = resolveAdapter(modelField?.data?.toString('utf8'));
+  const adapter = await resolveAdapter(modelField?.data?.toString('utf8'));
 
   let text: string;
   let totalPages: number;

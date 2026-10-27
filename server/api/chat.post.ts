@@ -16,7 +16,9 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const { messages } = body;
   const requestedModel = body?.forwardedProps?.model ?? body?.data?.model;
-  const adapter = resolveAdapter(typeof requestedModel === 'string' ? requestedModel : undefined);
+  const adapter = await resolveAdapter(
+    typeof requestedModel === 'string' ? requestedModel : undefined,
+  );
   const abortController = new AbortController();
 
   try {

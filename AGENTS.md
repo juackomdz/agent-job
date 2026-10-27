@@ -21,18 +21,17 @@ Nuxt 4 (Vue 3 + TypeScript) job-search agent for the Chilean IT market. SSR app 
 
 `.env` is gitignored and holds secrets — don't read it into the transcript and never commit it. `.env.example` is the template.
 
-| var                      | maps to                         | used by                                                     |
-| ------------------------ | ------------------------------- | ----------------------------------------------------------- |
-| `DB_FILE_NAME`           | `process.env`                   | SQLite file path (`*.db` is gitignored)                     |
-| `NUXT_TAVILY_API_KEY`    | `runtimeConfig.tavilyApiKey`    | Tavily MCP endpoint                                         |
-| `NUXT_OPENAI_API_KEY`    | `runtimeConfig.openaiApiKey`    | native OpenAI provider (only listed if set)                 |
-| `NUXT_OPENAI_MODELS`     | `runtimeConfig.openaiModels`    | comma-separated OpenAI models (default `gpt-5-mini`)        |
-| `NUXT_ANTHROPIC_API_KEY` | `runtimeConfig.anthropicApiKey` | native Anthropic provider (only listed if set)              |
-| `NUXT_ANTHROPIC_MODELS`  | `runtimeConfig.anthropicModels` | comma-separated Claude models (default `claude-sonnet-4-5`) |
-| `NUXT_BASE_URL`          | `runtimeConfig.baseUrl`         | OpenAI-compatible endpoint                                  |
-| `NUXT_MODEL_API_KEY`     | `runtimeConfig.modelApiKey`     | model auth                                                  |
-| `NUXT_MODEL`             | `runtimeConfig.model`           | compatible model ids, comma-separated                       |
-| `NUXT_DEFAULT_MODEL`     | `runtimeConfig.defaultModel`    | preselected model id, e.g. `openai:gpt-5-mini`              |
+| var                      | maps to                         | used by                                                  |
+| ------------------------ | ------------------------------- | -------------------------------------------------------- |
+| `DB_FILE_NAME`           | `process.env`                   | SQLite file path (`*.db` is gitignored)                  |
+| `NUXT_TAVILY_API_KEY`    | `runtimeConfig.tavilyApiKey`    | Tavily MCP endpoint                                      |
+| `NUXT_OPENAI_API_KEY`    | `runtimeConfig.openaiApiKey`    | native OpenAI provider (only listed if set)              |
+| `NUXT_ANTHROPIC_API_KEY` | `runtimeConfig.anthropicApiKey` | native Anthropic provider (only listed if set)           |
+| `NUXT_BASE_URL`          | `runtimeConfig.baseUrl`         | OpenAI-compatible endpoint (`/models` must be available) |
+| `NUXT_MODEL_API_KEY`     | `runtimeConfig.modelApiKey`     | model auth                                               |
+| `NUXT_DEFAULT_MODEL`     | `runtimeConfig.defaultModel`    | preselected model id, e.g. `openai:gpt-5-mini`           |
+
+Los modelos **no** se configuran en `.env`: salen de `OPENAI_CHAT_MODELS` / `ANTHROPIC_MODELS` de cada adapter y de `GET {NUXT_BASE_URL}/models` para el endpoint compatible.
 
 - Nuxt CLI loads `.env` in dev/build and drizzle-kit loads it too (dotenv dep). The built server only sees the real process env → export the vars before `node .output/server/index.mjs`.
 - Model ids are namespaced `proveedor:modelo`. `server/ai/utils/providers.ts` reads `useRuntimeConfig()` per call (not at import time), so new credentials show up after restarting the dev server; the UI fetches the catalog from `/api/models`.
@@ -51,8 +50,8 @@ Nuxt 4 (Vue 3 + TypeScript) job-search agent for the Chilean IT market. SSR app 
 - Pages: `index.vue` (dashboard: stats + top offers, SSR `useFetch`), `chat.vue` → `ChatPanel.vue` (SSE chat via `@tanstack/ai-vue` `useChat({ connection: fetchServerSentEvents('/api/chat') })`, model picked with `ModelSelect`), `subir-cv.vue` (PDF upload form), `ofertas.vue` (full table + pagination).
 - `app/composables/useOffersTable.ts` owns the TanStack Table v9 setup (sort by `match` desc, pagination); pages just wire `OffersTable` + `Pagination`.
 - `server/api/chat.post.ts` — POST `/api/chat` (body `{ messages, forwardedProps?: { model } }`) → SSE via `toServerSentEventsResponse`. The model is chosen per request (`provider:model` id from `/api/models`, also sent in the `data` envelope) and resolved by `server/ai/utils/providers.ts` → native OpenAI/Anthropic adapters or an OpenAI-compatible endpoint; unknown ids are 400. Search tools come from the **Tavily MCP server** (`createMCPClient`, http transport `https://mcp.tavily.com/mcp/?tavilyApiKey=…`) — remote MCP tools, not local functions. Wired local tools: `get_cv_data` (read the latest CV profile) and `save_job_tool` (insert into `offers`, unique `url`, `onConflictDoNothing`, `match` 0–100).
-- `server/ai/utils/providers.ts` — provider registry. `getAvailableModels()` builds the catalog from env (a provider only appears when it has a key), `getDefaultModelId()` honors `NUXT_DEFAULT_MODEL`, `resolveAdapter()` whitelists the id before creating an adapter.
-- `server/api/models.get.ts` — GET `/api/models` → `{ models, default }`, never keys. The UI stores the picked id in the `ai-model` cookie via `app/composables/useModelSelection.ts` and renders it with `app/components/ModelSelect.vue`.
+- `server/ai/utils/providers.ts` — provider registry. `getAvailableModels()` (async) builds the catalog from the adapters' own model lists (`OPENAI_CHAT_MODELS` minus audio/search/codex/etc., `ANTHROPIC_MODELS`) and from `GET {baseUrl}/models` for the compatible endpoint (in-memory cache: 10 min success, 60 s failure; if it fails the provider is hidden, no env fallback). `getDefaultModelId()` honors `NUXT_DEFAULT_MODEL` and otherwise prefers `gpt-5-mini` / `claude-sonnet-4-5`; `resolveAdapter()` (async) whitelists the id before creating an adapter.
+- `server/api/models.get.ts` — GET `/api/models` → `{ models, default }`, never keys. The UI stores the picked id in the `ai-model` cookie via `app/composables/useModelSelection.ts` and renders it with `app/components/ModelSelect.vue` (searchable combobox grouped by provider).
 - `server/ai/utils/tools.ts` — the zod schemas are the tool contract. `save_profile` is defined but **not passed to `chat()`** → dead code unless you wire it.
 - `server/ai/utils/system.ts` — the Spanish system prompt; it is the spec for how the agent must use the tools (search → extract → score → save, only `match >= 60`). Update it whenever tool behaviour changes.
 - `server/api/cv.post.ts` — POST `/api/cv`: multipart field name **`file`** (plus optional `model`), PDF only (415 otherwise), ≤ 5 MB, text extracted with `unpdf`, structured output validated by `CvSchema` → `saveCvProfile`. Requires a provider that supports structured output.

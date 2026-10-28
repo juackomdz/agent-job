@@ -31,6 +31,7 @@ export default defineEventHandler(async (event) => {
     });
 
     const stream = chat({
+      threadId: 'chat-id',
       messages,
       adapter,
       systemPrompts: [system_prompt],

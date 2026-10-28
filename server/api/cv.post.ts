@@ -66,6 +66,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const profile = await chat({
+    threadId: 'cv-parse-id',
     stream: false,
     adapter,
     outputSchema: CvSchema,

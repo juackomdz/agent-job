@@ -18,7 +18,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "@lucide/vue": "^1.62.0",
+    "@lucide/vue": "^1.63.0",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/ai": "^1.0.0",
     "@tanstack/ai-anthropic": "1.0.0",

@@ -33,6 +33,9 @@ importers:
       '@tanstack/ai-openai':
         specifier: ^1.0.0
         version: 1.0.0(@tanstack/ai@1.0.0(@opentelemetry/api@1.10.0)(zod@4.6.7))(google-auth-library@10.9.1(supports-color@10.2.2))(undici@8.12.3)(ws@8.22.0)(zod@4.6.7)
+      '@tanstack/ai-persistence':
+        specifier: ^1.0.1
+        version: 1.0.1(@tanstack/ai@1.0.0(@opentelemetry/api@1.10.0)(zod@4.6.7))
       '@tanstack/ai-vue':
         specifier: ^1.0.0
         version: 1.0.0(@opentelemetry/api@1.10.0)(@tanstack/ai@1.0.0(@opentelemetry/api@1.10.0)(zod@4.6.7))(vue@3.5.44)(zod@4.6.7)
@@ -1551,6 +1554,15 @@ packages:
     resolution: {integrity: sha512-p0blsUs98FSnIXgYk8KMAbyBTWCHdZj4PyvhrUuO3vU4aNAnjlwunDyrqVhmP8gXA3k0oSUru4UAmXXKnN5j4g==}
     peerDependencies:
       '@tanstack/ai': ^1.0.0
+
+  '@tanstack/ai-persistence@1.0.1':
+    resolution: {integrity: sha512-nsQ6kHRyN/tN41Ccxxk6LRsmru9YnoE9aM3G9X888iBtYK0znh7bBGCMHGDc+dt5GAeHVKq7GLqW7wt92c0U4A==}
+    peerDependencies:
+      '@tanstack/ai': ^1.0.1
+      vitest: ^4.1.10
+    peerDependenciesMeta:
+      vitest:
+        optional: true
 
   '@tanstack/ai-utils@1.0.0':
     resolution: {integrity: sha512-0Nl9rUmS3zTGKP8dPmyS2zJ18mieAheKqS9V+390vjViJvD6kpP+1gdCdHkNUqQsSzSFvb32QW8bkTVCAOv0qA==}
@@ -5496,6 +5508,11 @@ snapshots:
       - undici
       - ws
       - zod
+
+  '@tanstack/ai-persistence@1.0.1(@tanstack/ai@1.0.0(@opentelemetry/api@1.10.0)(zod@4.6.7))':
+    dependencies:
+      '@tanstack/ai': 1.0.0(@opentelemetry/api@1.10.0)(zod@4.6.7)
+      '@tanstack/ai-utils': 1.0.0
 
   '@tanstack/ai-utils@1.0.0': {}
 

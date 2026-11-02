@@ -6,9 +6,11 @@ import {
   maxIterations,
 } from '@tanstack/ai';
 import { createMCPClient } from '@tanstack/ai-mcp';
+import { withPersistence } from '@tanstack/ai-persistence'
 import { save_job, get_data } from '../ai/utils/tools';
 import { system_prompt } from '../ai/utils/system';
 import { resolveAdapter } from '../ai/utils/providers';
+import { persistence } from '../ai/utils/persistence'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
@@ -44,7 +46,7 @@ export default defineEventHandler(async (event) => {
         untilFinishReason(['stop', 'length']),
       ]),
       abortController,
-      middleware: [],
+      middleware: [withPersistence(persistence)],
     });
 
     return toServerSentEventsResponse(stream, { abortController });

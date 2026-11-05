@@ -18,21 +18,21 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "@lucide/vue": "^1.63.0",
-    "@tailwindcss/vite": "^4.3.3",
-    "@tanstack/ai": "^1.0.0",
-    "@tanstack/ai-anthropic": "1.0.0",
-    "@tanstack/ai-gemini": "^1.0.0",
-    "@tanstack/ai-mcp": "^1.0.0",
-    "@tanstack/ai-openai": "^1.0.0",
+    "@lucide/vue": "^1.68.0",
+    "@tailwindcss/vite": "^4.3.4",
+    "@tanstack/ai": "^1.1.0",
+    "@tanstack/ai-anthropic": "1.1.0",
+    "@tanstack/ai-gemini": "^1.1.0",
+    "@tanstack/ai-mcp": "^1.1.0",
+    "@tanstack/ai-openai": "^1.1.0",
     "@tanstack/ai-persistence": "^1.0.1",
-    "@tanstack/ai-vue": "^1.0.0",
+    "@tanstack/ai-vue": "^1.0.1",
     "@tanstack/vue-table": "^9.3.1",
     "better-sqlite3": "^13.0.3",
     "daisyui": "^5.7.50",
     "drizzle-orm": "1.0.0-rc.4",
-    "nuxt": "^4.6.3",
-    "tailwindcss": "^4.3.3",
+    "nuxt": "^4.6.4",
+    "tailwindcss": "^4.3.4",
     "unpdf": "^1.9.1",
     "vue": "^3.5.44",
     "vue-router": "^5.4.0",
@@ -40,9 +40,9 @@
   },
   "devDependencies": {
     "@types/better-sqlite3": "^9.6.0",
-    "@types/node": "^26.6.5",
+    "@types/node": "^26.6.6",
     "drizzle-kit": "1.0.0-rc.4",
     "oxfmt": "^0.67.0",
-    "oxlint": "^1.90.0"
+    "oxlint": "^1.91.0"
   }
 }

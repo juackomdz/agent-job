@@ -5,19 +5,22 @@ import {
   type ColumnDef,
   columnSizingFeature,
   rowPaginationFeature,
+  rowSortingFeature,
   createPaginatedRowModel,
+  createSortedRowModel,
 } from '@tanstack/vue-table';
 import type { Offer } from '#shared/types';
 
 export type OffersTableInstance = ReturnType<typeof useOffersTable>;
 
 export function useOffersTable(offers: { value: Offer[] }, items: number = 10) {
-  const sorted = computed(() => [...offers.value].sort((a, b) => b.match! - a.match!));
 
   const features = tableFeatures({
     columnSizingFeature,
     rowPaginationFeature,
+    rowSortingFeature,
     paginatedRowModel: createPaginatedRowModel(),
+    sortedRowModel: createSortedRowModel(),
   });
 
   const columns: Array<ColumnDef<typeof features, Offer>> = [
@@ -48,6 +51,7 @@ export function useOffersTable(offers: { value: Offer[] }, items: number = 10) {
           'Abrir',
         ),
       size: 140,
+      enableSorting: false
     },
     {
       accessorKey: 'match',
@@ -61,7 +65,7 @@ export function useOffersTable(offers: { value: Offer[] }, items: number = 10) {
     key: 'offers_table',
     features,
     columns,
-    data: sorted,
+    data: offers.value,
     initialState: {
       pagination: {
         pageIndex: 0,

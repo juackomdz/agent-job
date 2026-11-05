@@ -31,8 +31,10 @@ const table = props.table;
               :key="header.id"
               class="truncate"
               :style="{ width: `${header.getSize()}px` }"
+              @click="header.column.getToggleSortingHandler()?.($event)"
             >
-              <FlexRender :header="header"></FlexRender>
+              <FlexRender :header="header" />
+              {{ {asc: '🔼', desc: '🔽'}[header.column.getIsSorted() as string] }}
             </th>
           </tr>
         </thead>

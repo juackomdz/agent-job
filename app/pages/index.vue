@@ -22,8 +22,6 @@ const avgMatch = computed(() => {
   return ms.length ? Math.round(ms.reduce((a, b) => a + b, 0) / ms.length) : 0;
 });
 const topMatch = computed(() => Math.max(0, ...offers.value.map((o) => o.match ?? 0)));
-
-console.log(offers.value.length);
 </script>
 
 <template>

@@ -36,9 +36,7 @@ const flat = computed(() => filtered.value.flatMap((group) => group.options));
 
 const displayValue = computed(() => {
   if (open.value) return query.value;
-  return current.value
-    ? `${PROVIDER_LABELS[current.value.provider]} · ${current.value.model}`
-    : '';
+  return current.value ? `${PROVIDER_LABELS[current.value.provider]} · ${current.value.model}` : '';
 });
 
 function scrollActiveIntoView() {
@@ -146,6 +144,7 @@ onBeforeUnmount(() => {
         :value="displayValue"
         class="input input-sm w-52 max-w-full sm:w-64"
         :placeholder="open ? 'Buscar modelo…' : 'Modelo'"
+        aria-label="Modelo"
         role="combobox"
         aria-autocomplete="list"
         :aria-expanded="open"

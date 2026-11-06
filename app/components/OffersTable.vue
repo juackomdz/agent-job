@@ -23,7 +23,7 @@ const table = props.table;
     </p>
 
     <div v-else class="mx-auto w-full overflow-x-auto border border-base-200">
-      <table class="table table-fixed text-center">
+      <table aria-label="Ofertas de trabajo" class="table table-fixed text-center">
         <thead>
           <tr v-for="headers in table.getHeaderGroups()" :key="headers.id">
             <th

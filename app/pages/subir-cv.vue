@@ -87,6 +87,7 @@ const subir = async () => {
     <form class="flex w-full flex-col items-center gap-3" @submit.prevent="subir">
       <input
         type="file"
+        aria-label="Archivo del CV"
         class="file-input file-input-bordered w-full"
         :disabled="isProcesando"
         @change="handleFile"

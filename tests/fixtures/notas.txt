@@ -1,0 +1,2 @@
+Este archivo no es un PDF.
+Sirve para comprobar que la API responde 415.

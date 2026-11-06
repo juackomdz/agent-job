@@ -16,7 +16,9 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "test:e2e": "e2e run"
+    "test:e2e": "e2e run --exclude-tag live",
+    "test:e2e:smoke": "e2e run --tag smoke",
+    "test:e2e:live": "e2e run --tag live"
   },
   "dependencies": {
     "@lucide/vue": "^1.63.0",

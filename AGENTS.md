@@ -11,7 +11,8 @@ Nuxt 4 (Vue 3 + TypeScript) job-search agent for the Chilean IT market. SSR app 
 - `pnpm generate` / `pnpm preview` — static build / preview
 - `pnpm lint` — oxlint (currently clean, keep it clean)
 - `pnpm fmt` / `pnpm fmt:check` — oxfmt, single quotes (`.oxfmtrc.json`). **oxfmt also formats Markdown**, so `pnpm fmt` also rewrites `README.md` / `AGENTS.md`.
-- `pnpm test:e2e` — agentic e2e tests (see Testing). The only test suite; no unit tests, no typecheck (vue-tsc is not installed).
+- `pnpm test:e2e` — e2e deterministas (excluye el tag `live`); el runner levanta la app y usa su propia BD en `.e2e/test.db` (ver Testing). The only test suite; no unit tests, no typecheck (vue-tsc is not installed).
+- `pnpm test:e2e:smoke` / `pnpm test:e2e:live` — solo los tags `smoke` / `live`. Los `live` necesitan el modelo local en `http://localhost:9931/v1` (y chat además `NUXT_TAVILY_API_KEY`).
 - `pnpm db:push` / `db:generate` / `db:migrate` / `db:studio` — drizzle-kit (see Database)
 - `pnpm install` → runs `nuxt prepare` (postinstall); re-run it after adding deps or modules.
 - New native deps must be allowlisted in `allowBuilds` in `pnpm-workspace.yaml`, otherwise pnpm blocks their install scripts.
@@ -59,7 +60,13 @@ Model ids are namespaced `proveedor:modelo` and do **not** come from `.env`: the
 
 ## Testing (agentic e2e)
 
-- `pnpm test:e2e` (`e2e run`): tests in `tests/*.e2e.ts` (default glob `tests/**/*.e2e.ts`), mixing `agent.*` goals with exact locator assertions (`app`, `browser`, `expect`).
-- **The runner starts neither the app nor the agent model.** Start `pnpm dev` first (target URL from `APP_URL`, default `http://localhost:3000`). Agent steps run against an OpenAI-compatible server at `http://localhost:9931/v1`, model `tester` — have it running for agent-based tests; locator-only tests work without it.
+- `pnpm test:e2e` (`e2e run --exclude-tag live`): tests in `tests/**/*.e2e.ts`, mixing exact locator assertions (`app`, `browser`, `expect`) and, where needed, `agent.*` goals. The only test suite; there are no unit tests.
+- **The runner starts the app** (`app.command` in `e2e.config.ts`: Nuxt dev on a free port, host `127.0.0.1`) and passes its own env: `DB_FILE_NAME=.e2e/test.db`, `NUXT_BASE_URL=http://localhost:9931/v1`, `NUXT_MODEL_API_KEY`, `NUXT_DEFAULT_MODEL=compatible:tester`, `E2E_TEST=1` (disables Nuxt DevTools). No need to run `pnpm dev`.
+- `workers: 1`: the app and the tests share `.e2e/test.db`. `tests/utils/fixtures.ts` exports the `test` used by the suite (import it from there, not from `@e2e-dev/web`); its `db` fixture resets the DB before every test and exposes `seedOffers()` / `seedCv()`.
+- Tags: `smoke` = deterministic, no model; `live` = real app model. `pnpm test:e2e:smoke` runs only `smoke`, `pnpm test:e2e:live` only `live`. Chat tests also need `NUXT_TAVILY_API_KEY` (read from `.env` by Nuxt). The model-select tests skip when `/api/models` returns an empty catalog.
+- CI: `.github/workflows/e2e.yml` runs only the `smoke` tag on pull requests and pushes to `main` (Chromium installed with `e2e-web install`; no local model or Tavily needed).
+- After `app.open()` call `waitForHydration(browser)` (`tests/utils/hydration.ts`) before interacting with Vue forms. It waits for `window.__APP_READY__`, set by `app/plugins/e2e-ready.client.ts` via `onNuxtReady`.
+- `ensureTestSchema()` runs at `e2e.config.ts` load (before the app opens the DB). `nuxt.config.ts` pre-bundles `@lucide/vue`, `@tanstack/ai-vue` and `@tanstack/vue-table` to avoid Vite reloads mid-test.
+- Fixtures: `tests/fixtures/cv.pdf` (text extractable with `unpdf`), `corrupto.pdf` and `notas.txt`. The >5 MB PDF is generated at runtime in `.e2e/tmp/`.
 - The e2e agent model is TanStack AI wrapped as an AI SDK `LanguageModel` in `tests/utils/tanstack-adapter.ts` (one model call per invocation; e2e owns the tool loop) — adapt it when switching providers.
 - Use the repo-local `e2e` skill (`.agents/skills/e2e/`, one reference per topic) and the `e2e` MCP server (`e2e mcp`) when writing, running or debugging e2e. Run artifacts land in `.e2e/` (gitignored).

@@ -30,7 +30,7 @@ logs
 *.db*
 file
 
-.e2e/
+.e2e
 .e2e/results/
 .e2e/cache/
 .e2e/sessions/

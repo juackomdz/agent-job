@@ -24,13 +24,24 @@ export default defineEventHandler(async (event) => {
   const abortController = new AbortController();
 
   try {
-    const mcp = await createMCPClient({
-      name: 'tavily-mcp',
+
+    if (!config.apifyApiKey) {
+      throw createError({
+        statusCode: 500,
+        message: 'Falta NUXT_APIFY_API_KEY',
+      });
+    }
+
+    const apify = await createMCPClient({
+      name: 'apify',
       transport: {
         type: 'http',
-        url: `https://mcp.tavily.com/mcp/?tavilyApiKey=${config.tavilyApiKey}`,
-      },
-    });
+        url: 'https://mcp.apify.com?tools=search-actors,fetch-actor-details,call-actor,apify/web-search,apify/web-fetch',
+        headers: {
+          "Authorization": `Bearer ${config.apifyApiKey}`
+        }
+      }
+    })
 
     const stream = chat({
       threadId: 'chat-id',
@@ -38,12 +49,12 @@ export default defineEventHandler(async (event) => {
       adapter,
       systemPrompts: [system_prompt],
       mcp: {
-        clients: [mcp],
+        clients: [apify],
       },
       tools: [save_job, get_data],
       agentLoopStrategy: combineStrategies([
-        maxIterations(10),
-        untilFinishReason(['stop', 'length']),
+        maxIterations(20),
+        untilFinishReason(['stop']),
       ]),
       abortController,
       middleware: [withPersistence(persistence)],

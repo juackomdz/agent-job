@@ -1,14 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-
-interface Offer {
-  id: number;
-  title: string;
-  company: string;
-  match: number | null;
-  url: string;
-  description: string;
-}
+import type { Offer } from '#shared/types'
 
 const { data: offersData, pending: offersPending } = await useFetch<{ offers: Offer[] }>(
   '/api/offers',
@@ -23,7 +15,6 @@ const avgMatch = computed(() => {
 });
 const topMatch = computed(() => Math.max(0, ...offers.value.map((o) => o.match ?? 0)));
 
-console.log(offers.value.length);
 </script>
 
 <template>

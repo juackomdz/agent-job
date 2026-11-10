@@ -1,10 +1,4 @@
-export type ProviderId = 'openai' | 'anthropic' | 'compatible';
-
-export interface ModelOption {
-  id: string;
-  provider: ProviderId;
-  model: string;
-}
+import type { ProviderId } from '#shared/types'
 
 export const PROVIDER_LABELS: Record<ProviderId, string> = {
   openai: 'OpenAI',

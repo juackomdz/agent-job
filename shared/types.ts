@@ -1,34 +1,3 @@
-export interface TavilyApiResult {
-  title: string;
-  url: string;
-  content: string;
-  score?: number;
-}
-export interface TavilyApiResponse {
-  answer?: string;
-  results: TavilyApiResult[];
-}
-
-export interface TavilyExtractResponse {
-  results: {
-    url: string;
-    raw_content: string;
-    images?: string[];
-    favicon: string;
-  }[];
-  failed_results: FailedResults[];
-  response_time: number;
-  usage: {
-    credits: number;
-  };
-  request_id: string;
-}
-
-interface FailedResults {
-  url: string;
-  error: string;
-}
-
 export interface Offer {
   id: number;
   title: string;
@@ -36,4 +5,17 @@ export interface Offer {
   match: number | null;
   url: string;
   description: string;
+}
+
+export type ProviderId = 'openai' | 'anthropic' | 'compatible';
+
+export interface ModelOption {
+  id: string;
+  provider: ProviderId;
+  model: string;
+}
+
+export interface ModelsResponse {
+  models: ModelOption[];
+  default: string | null;
 }

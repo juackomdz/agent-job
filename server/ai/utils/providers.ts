@@ -10,7 +10,8 @@ import {
   type OpenAIChatModel,
 } from '@tanstack/ai-openai';
 import { openaiCompatibleText } from '@tanstack/ai-openai/compatible';
-import { toModelId, type ModelOption, type ProviderId } from '#shared/models';
+import { toModelId } from '#shared/models';
+import type { ModelOption, ProviderId } from '#shared/types'
 
 const NON_CHAT_MODEL =
   /audio|realtime|search|computer-use|deep-research|codex|image|embedding|tts|transcri|moderation/i;

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Offer } from '#shared/types';
 
-const { data, pending } = useFetch<{ offers: Offer[] }>('/api/offers');
+const { data, pending } = await useFetch<{ offers: Offer[] }>('/api/offers');
 
 const offers = computed(() => data.value?.offers ?? []);
 const table = useOffersTable(offers);

@@ -62,7 +62,7 @@ export default defineEventHandler(async (event) => {
       tools: [save_job, get_data],
       agentLoopStrategy: combineStrategies([
         maxIterations(20),
-        untilFinishReason(['stop']),
+        untilFinishReason(['stop', 'length']),
       ]),
       abortController,
       middleware: [withPersistence(persistence)],

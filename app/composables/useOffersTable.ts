@@ -1,4 +1,4 @@
-import { computed, h } from 'vue';
+import { h } from 'vue';
 import {
   useTable,
   tableFeatures,

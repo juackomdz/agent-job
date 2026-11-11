@@ -9,9 +9,7 @@ El agente usa openai-compatible, por lo que puedes usar tanto modelos locales (o
 ## NOTAS
 *Requiere NodeJS 22 o superior
 
-Internamente usa el MCP de Tavily para realizar la busqueda y extracción de ofertas. Por lo que es necesario tener una api key.
-
-Puedes conseguir tu api key en https://www.tavily.com
+Internamente usa el MCP de Apify para realizar la busqueda y extracción de ofertas. Por lo que es necesario tener una api key.
 
 
 ## Setup

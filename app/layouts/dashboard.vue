@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { House, MessagesCircle, FileUser, List } from '@lucide/vue';
+import { House, MessagesCircle, FileUser, List, BriefcaseBusiness } from '@lucide/vue';
 
 const route = useRoute();
 
@@ -28,7 +28,7 @@ function isActive(to: string) {
             </label>
           </div>
           <div class="navbar-end">
-            <NuxtLink to="/" class="text-sm font-bold tracking-tight">Job Agent</NuxtLink>
+            <NuxtLink to="/" class="text-sm font-bold tracking-tight">Agent Job</NuxtLink>
           </div>
         </header>
 
@@ -42,7 +42,8 @@ function isActive(to: string) {
       <div class="drawer-side">
         <label for="sidebar-drawer" aria-label="Cerrar menú" class="drawer-overlay" />
         <aside class="flex min-h-full w-60 flex-col border-r border-base-200 bg-base-100 px-3 py-5">
-          <NuxtLink to="/" class="px-2 text-sm font-bold tracking-tight">Job Agent</NuxtLink>
+          <NuxtLink to="/" class="px-2 text-sm font-bold tracking-tight">
+            <BriefcaseBusiness :size="35"/> Agent Job</NuxtLink>
 
           <nav class="mt-6">
             <ul class="menu w-full gap-1 p-0">

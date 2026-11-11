@@ -4,6 +4,7 @@ import {
   untilFinishReason,
   combineStrategies,
   maxIterations,
+  chatParamsFromRequestBody
 } from '@tanstack/ai';
 import { createMCPClient } from '@tanstack/ai-mcp';
 import { withPersistence } from '@tanstack/ai-persistence'
@@ -16,10 +17,17 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
 
   const body = await readBody(event);
-  const { messages } = body;
-  const requestedModel = body?.forwardedProps?.model ?? body?.data?.model;
+
+  let params: Awaited<ReturnType<typeof chatParamsFromRequestBody>>
+  try {
+    params = await chatParamsFromRequestBody(body)
+  } catch (error) {
+    if (error) return error
+    throw error
+  }
+
   const adapter = await resolveAdapter(
-    typeof requestedModel === 'string' ? requestedModel : undefined,
+    typeof params.forwardedProps.model === 'string' ? params.forwardedProps.model : undefined,
   );
   const abortController = new AbortController();
 
@@ -44,8 +52,8 @@ export default defineEventHandler(async (event) => {
     })
 
     const stream = chat({
-      threadId: 'chat-id',
-      messages,
+      threadId: params.threadId,
+      messages: params.messages,
       adapter,
       systemPrompts: [system_prompt],
       mcp: {

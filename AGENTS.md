@@ -7,13 +7,14 @@ Nuxt 4 (Vue 3 + TypeScript) job-search agent for the Chilean IT market. SSR app 
 ## Commands
 
 - `pnpm dev` — dev server on `http://localhost:3000`
-- `pnpm build` → `pnpm start` — production; `start` runs `node --env-file=.env .output/server/index.mjs`, so it does load `.env` (plain `node .output/server/index.mjs` does not).
+- `pnpm build` → `pnpm start` runs the built server (`node --env-file=.env .output/server/index.mjs`; needs Node ≥ 22 for `--env-file`)
 - `pnpm generate` / `pnpm preview` — static build / preview
-- `pnpm lint` — oxlint; it currently passes, keep it clean.
-- `pnpm fmt` / `pnpm fmt:check` — oxfmt, single quotes. **It also formats Markdown**, so it rewrites `README.md` and this file. `fmt:check` currently fails on many pre-existing files (and `.e2e` artifacts), so don't run `pnpm fmt` repo-wide; format only the files you touched with `pnpm exec oxfmt <paths>`.
-- `pnpm install` runs `nuxt prepare`; re-run it after adding deps or modules.
-- **No typecheck (vue-tsc is not installed) and no unit test suite.** `pnpm lint` is the only repo-wide check that currently passes.
-- `.github/workflows/e2e.yml` (smoke tag) shells out to external `e2e` / `e2e-web` CLIs that are **not** in `package.json`; `pnpm exec e2e` fails after a plain install.
+- `pnpm lint` — oxlint (currently clean, keep it clean)
+- `pnpm fmt` / `pnpm fmt:check` — oxfmt, single quotes (`.oxfmtrc.json`). **oxfmt also formats Markdown**, so `pnpm fmt` also rewrites `README.md` / `AGENTS.md`.
+- `pnpm test:e2e` — e2e deterministas (excluye el tag `live`); el runner levanta la app y usa su propia BD en `.e2e/test.db` (ver Testing). The only test suite; no unit tests, no typecheck (vue-tsc is not installed).
+- `pnpm test:e2e:smoke` / `pnpm test:e2e:live` — solo los tags `smoke` / `live`. Los `live` necesitan el modelo local en `http://localhost:9931/v1` (y chat además `NUXT_TAVILY_API_KEY`).
+- `pnpm db:push` / `db:generate` / `db:migrate` / `db:studio` — drizzle-kit (see Database)
+- `pnpm install` → runs `nuxt prepare` (postinstall); re-run it after adding deps or modules.
 - New native deps must be allowlisted in `allowBuilds` in `pnpm-workspace.yaml`, otherwise pnpm blocks their install scripts.
 
 ## Env

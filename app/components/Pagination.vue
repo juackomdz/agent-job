@@ -12,14 +12,18 @@ const table = props.table;
 <template>
   <div id="pagination" class="join">
     <button
+      type="button"
       class="join-item btn"
+      aria-label="Primera página"
       @click="table.firstPage()"
       :disabled="!table.getCanPreviousPage()"
     >
       <ChevronsLeft :size="20" />
     </button>
     <button
+      type="button"
       class="join-item btn"
+      aria-label="Página anterior"
       @click="table.previousPage()"
       :disabled="!table.getCanPreviousPage()"
     >

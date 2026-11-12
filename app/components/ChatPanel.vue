@@ -52,7 +52,12 @@ watch(messages, async () => {
     :class="compact ? 'h-130' : 'h-150'"
   >
     <div class="flex h-full min-h-0 flex-col">
-      <div ref="scrollRef" class="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4">
+      <div
+        ref="scrollRef"
+        role="log"
+        aria-label="Mensajes del chat"
+        class="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4"
+      >
         <p
           v-if="!messages.length"
           class="mx-auto max-w-md text-center text-sm text-base-content/60"
@@ -65,6 +70,7 @@ watch(messages, async () => {
           :key="m.id"
           class="chat"
           :class="m.role === 'user' ? 'chat-end' : 'chat-start'"
+          :data-testid="m.role === 'user' ? 'msg-user' : 'msg-assistant'"
         >
           <div
             class="chat-bubble max-w-[85%] text-sm whitespace-pre-wrap"
@@ -75,7 +81,7 @@ watch(messages, async () => {
         </div>
       </div>
 
-      <p v-if="error" class="px-4 pt-2 text-center text-xs text-error">
+      <p v-if="error" role="alert" class="px-4 pt-2 text-center text-xs text-error">
         {{ error.message }}
       </p>
       <form class="flex flex-col gap-2 border-t border-base-200 p-3" @submit.prevent="handleSubmit">
@@ -91,7 +97,7 @@ watch(messages, async () => {
             <button type="submit" class="btn btn-primary" :disabled="!canSend">Enviar</button>
           </div>
           <div v-else>
-            <button class="btn btn-primary" @click="stop()">
+            <button type="button" class="btn btn-primary" aria-label="Detener" @click="stop()">
               <Square />
             </button>
           </div>

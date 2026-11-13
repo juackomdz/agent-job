@@ -62,20 +62,35 @@ synchronous (`async` is a `COLLECTION_ERROR`).
 ```ts
 test('title', async ({ app, screen }) => {});
 test('title', { tags: ['smoke'], retries: 2, timeout: 60_000 }, async ({ app }) => {});
-describe('group', { tags: ['billing'] }, () => { /* tests and hooks */ });
-describe('checkout flow', { serial: true }, () => { /* ordered, shared app state */ });
-beforeEach(async ({ app }) => {});     // per attempt, with test fixtures
-afterEach(async ({ screen }) => {});   // runs after failures too, with its own cleanup budget
+describe('group', { tags: ['billing'] }, () => {
+  /* tests and hooks */
+});
+describe('checkout flow', { serial: true }, () => {
+  /* ordered, shared app state */
+});
+beforeEach(async ({ app }) => {}); // per attempt, with test fixtures
+afterEach(async ({ screen }) => {}); // runs after failures too, with its own cleanup budget
 beforeAll(async ({ platform }) => {}); // per suite realm, no app fixtures
 afterAll(async () => {});
 test.skip('later', async () => {});
-test.only('focus', async () => {});         // local only: CI fails with ONLY_IN_CI
-test('conditional', async () => { test.skip(await onlyOneOrg(), 'nothing to switch to'); }); // throws: the body stops here, reported skipped; call it before the first step
-test('later', async () => { test.skip('waiting on the API'); }); // bare skip from the body
+test.only('focus', async () => {}); // local only: CI fails with ONLY_IN_CI
+test('conditional', async () => {
+  test.skip(await onlyOneOrg(), 'nothing to switch to');
+}); // throws: the body stops here, reported skipped; call it before the first step
+test('later', async () => {
+  test.skip('waiting on the API');
+}); // bare skip from the body
 test.fail('known gap', async () => {}); // expected to fail: a test failure passes it, a pass fails it with UNEXPECTED_PASS
-test('gap on web', async ({ platform }) => { test.fail(platform === 'web', 'known gap'); }); // marks, does not throw; the body runs on
+test('gap on web', async ({ platform }) => {
+  test.fail(platform === 'web', 'known gap');
+}); // marks, does not throw; the body runs on
 test.setup('sign in', { sessions: ['admin'] }, async ({ app, screen, session }) => {}); // see Sign-in sessions
-const wsTest = test.extend<{ ws: Ws }>({ ws: async ({ browser }, use) => { await use(await seed()); await drop(); } });
+const wsTest = test.extend<{ ws: Ws }>({
+  ws: async ({ browser }, use) => {
+    await use(await seed());
+    await drop();
+  },
+});
 wsTest('uses the workspace', async ({ ws }) => {}); // code after use() is teardown, runs after failures too
 ```
 
@@ -84,20 +99,20 @@ setup test nor a serial member can call `test.fail`. `test.fail` covers test
 failures and timeouts only: an infrastructure error such as `ENGINE_FAILURE`
 or a blocked agent verdict still fails the test.
 
-| Option | Default | Notes |
-| --- | --- | --- |
-| `timeout` | `config.timeout`, 120 s | Covers `beforeEach` and the body. |
-| `retries` | `config.retries` | 0 to 10; a serial group's value applies to its members. |
-| `tags` | `[]` | Distinct, non-blank, no comma or edge whitespace (`'Login Form'` is fine); union across layers. `--tag smoke` selects, `--tag-mode all` requires every tag. |
-| `skip` | unset | `true` or a reason string. |
-| `fail` | unset | `true` or a reason string: expected to fail, as `test.fail`. Tests only, not groups or setup tests. |
-| `platforms` | unset | Only targets with these platforms, e.g. `['ios']`. |
-| `requires` | `[]` | Engine capabilities, e.g. `['browser']`; missing ones skip the test at selection rather than failing it with `UNSUPPORTED_CAPABILITY`. |
-| `session` | unset | Restore state saved by a setup test. |
-| `agentContext` | unset | Extra context for `agent.*` calls in this test or group. |
-| `agent` | the run's agent | A configured name (`agents.<name>`) or a list run once per agent; `--agent` narrows the list, a setup test takes one name. Innermost wins; `agent.act(..., { agent })` names another for one call. |
-| `trace`, `video` | the target's | `'off'`, `'on'`, `'retain-on-failure'`, `'on-first-retry'`, `'on-all-retries'`: whether the test keeps a trace page, which attempts record video. Innermost wins over `--trace` / `--video`, the target, and the config; video where the engine cannot record is `UNSUPPORTED_ARTIFACT` for the run. |
-| `serial` | `false` | Groups only. Members share app state, run in order on one worker, retry as a whole, and take the group's `trace` and `video`. |
+| Option           | Default                 | Notes                                                                                                                                                                                                                                                                                                |
+| ---------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `timeout`        | `config.timeout`, 120 s | Covers `beforeEach` and the body.                                                                                                                                                                                                                                                                    |
+| `retries`        | `config.retries`        | 0 to 10; a serial group's value applies to its members.                                                                                                                                                                                                                                              |
+| `tags`           | `[]`                    | Distinct, non-blank, no comma or edge whitespace (`'Login Form'` is fine); union across layers. `--tag smoke` selects, `--tag-mode all` requires every tag.                                                                                                                                          |
+| `skip`           | unset                   | `true` or a reason string.                                                                                                                                                                                                                                                                           |
+| `fail`           | unset                   | `true` or a reason string: expected to fail, as `test.fail`. Tests only, not groups or setup tests.                                                                                                                                                                                                  |
+| `platforms`      | unset                   | Only targets with these platforms, e.g. `['ios']`.                                                                                                                                                                                                                                                   |
+| `requires`       | `[]`                    | Engine capabilities, e.g. `['browser']`; missing ones skip the test at selection rather than failing it with `UNSUPPORTED_CAPABILITY`.                                                                                                                                                               |
+| `session`        | unset                   | Restore state saved by a setup test.                                                                                                                                                                                                                                                                 |
+| `agentContext`   | unset                   | Extra context for `agent.*` calls in this test or group.                                                                                                                                                                                                                                             |
+| `agent`          | the run's agent         | A configured name (`agents.<name>`) or a list run once per agent; `--agent` narrows the list, a setup test takes one name. Innermost wins; `agent.act(..., { agent })` names another for one call.                                                                                                   |
+| `trace`, `video` | the target's            | `'off'`, `'on'`, `'retain-on-failure'`, `'on-first-retry'`, `'on-all-retries'`: whether the test keeps a trace page, which attempts record video. Innermost wins over `--trace` / `--video`, the target, and the config; video where the engine cannot record is `UNSUPPORTED_ARTIFACT` for the run. |
+| `serial`         | `false`                 | Groups only. Members share app state, run in order on one worker, retry as a whole, and take the group's `trace` and `video`.                                                                                                                                                                        |
 
 Serial members cannot set `retries`, `trace`, `video`, `session`,
 `platforms`, `requires`, `skip`, `fail`, or `only`, nor can a nested `describe` set
@@ -149,14 +164,14 @@ methods are.
 `screen.getBy*` builds a lazy query, resolved only by an action, read, or
 assertion. Every query also exists on a locator, scoped to its subtree.
 
-| Query | Matches |
-| --- | --- |
-| `getByRole(role, name?, { exact?, checked?, disabled?, selected?, expanded?, pressed?, level?, visible? })` | Semantic role, optionally by accessible name (`getByRole('button', 'Save')`; the object form `{ name }` works too) and state (`level`: heading level 1 to 6). First choice. |
-| `getByLabel(text, { exact?, visible? })` | Form controls by label. |
-| `getByPlaceholder(text, { exact?, visible? })` | Inputs by placeholder. |
-| `getByText(text, { exact?, visible? })` | Visible text. |
-| `getByDisplayValue(value, { exact?, visible? })` | Inputs by current value; on the web it cannot scope child queries or be a `filter({ has })` or `filter({ hasNot })` target. |
-| `getByTestId(id, { visible? })` | `data-testid` on the web (or `web({ testIdAttribute })`), accessibility identifier or resource id on a device (React Native `testID`, SwiftUI `.accessibilityIdentifier`, Compose `testTag` with `testTagsAsResourceId` on Android, Flutter `Semantics(identifier:)`, .NET MAUI `AutomationId`, NativeScript `testID`); a string matches the whole id, a RegExp tests it; on Android the `<package>:id/` prefix may be left off. Last resort. |
+| Query                                                                                                       | Matches                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `getByRole(role, name?, { exact?, checked?, disabled?, selected?, expanded?, pressed?, level?, visible? })` | Semantic role, optionally by accessible name (`getByRole('button', 'Save')`; the object form `{ name }` works too) and state (`level`: heading level 1 to 6). First choice.                                                                                                                                                                                                                                                                   |
+| `getByLabel(text, { exact?, visible? })`                                                                    | Form controls by label.                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `getByPlaceholder(text, { exact?, visible? })`                                                              | Inputs by placeholder.                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `getByText(text, { exact?, visible? })`                                                                     | Visible text.                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `getByDisplayValue(value, { exact?, visible? })`                                                            | Inputs by current value; on the web it cannot scope child queries or be a `filter({ has })` or `filter({ hasNot })` target.                                                                                                                                                                                                                                                                                                                   |
+| `getByTestId(id, { visible? })`                                                                             | `data-testid` on the web (or `web({ testIdAttribute })`), accessibility identifier or resource id on a device (React Native `testID`, SwiftUI `.accessibilityIdentifier`, Compose `testTag` with `testTagsAsResourceId` on Android, Flutter `Semantics(identifier:)`, .NET MAUI `AutomationId`, NativeScript `testID`); a string matches the whole id, a RegExp tests it; on Android the `<package>:id/` prefix may be left off. Last resort. |
 
 Roles: `button`, `link`, `textbox`, `searchbox`, `combobox`, `listbox`,
 `option`, `checkbox`, `radio`, `radiogroup`, `switch`, `slider`, `spinbutton`,
@@ -282,9 +297,9 @@ config fails the run with exit code 1. The default is `false`.
 
 ```ts
 await expect(screen.getByRole('dialog')).not.toBeVisible({ timeout: 10_000 });
-await expect(browser).toHaveURL('/dashboard');   // relative to the base URL, or a RegExp
+await expect(browser).toHaveURL('/dashboard'); // relative to the base URL, or a RegExp
 expect(order).toMatchObject({ id: expect.any(Number), lines: [{ sku: 'a' }] });
-expect.soft(await screen.getByTestId('tax').textContent()).toBe('$8.00');  // kept, body runs on
+expect.soft(await screen.getByTestId('tax').textContent()).toBe('$8.00'); // kept, body runs on
 const users = expect(await response.json()).toMatchSchema(z.array(User)); // any Standard Schema; typed output
 ```
 
@@ -292,8 +307,8 @@ const users = expect(await response.json()).toMatchSchema(z.array(User)); // any
 ArkType), fails listing every issue by path, and returns the parsed value
 typed; prefer it when the app already has a schema for the response.
 
-| Locator matchers | Browser matchers | Value matchers |
-| --- | --- | --- |
+| Locator matchers                                                                                                                                                                                                                                                                        | Browser matchers                                             | Value matchers                                                                                                                                                                                                                                                                          |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `toBeVisible`, `toBeHidden`, `toBeAttached`, `toBeEnabled`, `toBeDisabled`, `toBeChecked`, `toBeSelected`, `toBeExpanded`, `toBeFocused`, `toHaveText`, `toContainText`, `toHaveValue`, `toHaveAttribute`, `toHaveCount`, `toHaveAccessibleName`, `toHaveScreenshot` (also on `screen`) | `toHaveURL`, `toHaveTitle`, `toHaveClass(locator, expected)` | `toBe`, `toEqual`, `toMatchObject`, `toBeTruthy`, `toBeFalsy`, `toBeNull`, `toBeUndefined`, `toBeDefined`, `toHaveLength`, `toHaveProperty`, `toContain`, `toMatch`, `toBeGreaterThan`, `toBeGreaterThanOrEqual`, `toBeLessThan`, `toBeLessThanOrEqual`, `toBeCloseTo`, `toMatchSchema` |
 
 `toHaveText` compares the whole normalized text, `toContainText` a substring
@@ -336,15 +351,19 @@ tests declare it. Selecting a dependent test alone still runs its setup.
 import { test } from '@e2e-dev/web';
 import { expect, credentials } from 'e2e';
 
-test.setup('authenticate as admin', { sessions: ['admin'] }, async ({ app, screen, session, browser }) => {
-  const admin = credentials.user('admin');
-  await app.open('/login');
-  await screen.getByLabel('Email').fill(admin.username);
-  await screen.getByLabel('Password').fill(admin.password);
-  await screen.getByRole('button', 'Sign in').tap();
-  await expect(browser).toHaveURL('/dashboard'); // prove the sign-in worked before saving
-  await session.save('admin');
-});
+test.setup(
+  'authenticate as admin',
+  { sessions: ['admin'] },
+  async ({ app, screen, session, browser }) => {
+    const admin = credentials.user('admin');
+    await app.open('/login');
+    await screen.getByLabel('Email').fill(admin.username);
+    await screen.getByLabel('Password').fill(admin.password);
+    await screen.getByRole('button', 'Sign in').tap();
+    await expect(browser).toHaveURL('/dashboard'); // prove the sign-in worked before saving
+    await session.save('admin');
+  },
+);
 ```
 
 ```ts
@@ -431,8 +450,14 @@ const projectTest = test.extend<{ project: { id: string } }>({
   project: async ({ app, browser }, use) => {
     const cookie = (await browser.cookies()).map((c) => `${c.name}=${c.value}`).join('; ');
     const api = (path: string, init: RequestInit = {}) =>
-      fetch(`${app.baseUrl}${path}`, { ...init, headers: { cookie, 'content-type': 'application/json' } });
-    const created = await api('/api/projects', { method: 'POST', body: JSON.stringify({ name: `Project ${Date.now()}` }) });
+      fetch(`${app.baseUrl}${path}`, {
+        ...init,
+        headers: { cookie, 'content-type': 'application/json' },
+      });
+    const created = await api('/api/projects', {
+      method: 'POST',
+      body: JSON.stringify({ name: `Project ${Date.now()}` }),
+    });
     const project = expect(await created.json()).toMatchSchema(z.object({ id: z.string() }));
     await use(project);
     await api(`/api/projects/${project.id}`, { method: 'DELETE' }); // runs after a failure too

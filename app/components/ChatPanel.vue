@@ -17,7 +17,7 @@ const scrollRef = ref<HTMLElement | null>(null);
 const { messages, sendMessage, isLoading, stop, error } = useChat({
   connection: fetchServerSentEvents('/api/chat'),
   threadId: 'chat-id',
-  persistence: true
+  persistence: true,
 });
 
 const { selected } = useModelSelection();

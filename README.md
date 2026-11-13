@@ -1,25 +1,25 @@
 # Agent Job
 
-Agente de IA para ayudarte a buscar trabajo IT, pensado para funcionar de manera local, sin necesidad de pasar por otro *harness* como claude code, codex, opencode, etc.
+Agente de IA para ayudarte a buscar trabajo IT, pensado para funcionar de manera local, sin necesidad de pasar por otro _harness_ como claude code, codex, opencode, etc.
 
 Hecho con Nuxt 4, Tanstack/AI, Drizzle ORM, SQLite.
 
-El agente usa openai-compatible, por lo que puedes usar tanto modelos locales (ollama, llama.cpp), como servicios en la nube (nvidia nim, openrouter) 
+El agente usa openai-compatible, por lo que puedes usar tanto modelos locales (ollama, llama.cpp), como servicios en la nube (nvidia nim, openrouter)
 
 ## NOTAS
+
 *Requiere NodeJS 22 o superior
 
 Internamente usa el MCP de Apify para realizar la busqueda y extracción de ofertas. Por lo que es necesario tener una api key.
-
 
 ## Setup
 
 Copia el .env.example y renombralo a .env y coloca tus apis de tavily, nombre de tu bd de sqlite, url del endpoint de tu servicio de llm.
 
-*Nota:* Si usas un modelo local (ollama, llama.cpp), puedes colocar cualquier texto en NUXT_MODEL_API_KEY; los modelos se leen desde `{NUXT_BASE_URL}/models`.
-
+_Nota:_ Si usas un modelo local (ollama, llama.cpp), puedes colocar cualquier texto en NUXT_MODEL_API_KEY; los modelos se leen desde `{NUXT_BASE_URL}/models`.
 
 ---
+
 Instala las dependencias:
 
 ```bash
@@ -27,10 +27,13 @@ pnpm install
 ```
 
 Puedes correr el proyecto en desarrollo y verlo en `http://localhost:3000`
+
 ```bash
 pnpm dev
 ```
+
 ---
+
 Tambien puedes correr el proyecto en producción con:
 
 ```bash
@@ -42,4 +45,3 @@ Y correr el siguiente comando para visualizarlo en `http://localhost:3000`
 ```bash
 pnpm start
 ```
-

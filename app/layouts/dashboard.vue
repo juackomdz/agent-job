@@ -43,7 +43,8 @@ function isActive(to: string) {
         <label for="sidebar-drawer" aria-label="Cerrar menú" class="drawer-overlay" />
         <aside class="flex min-h-full w-60 flex-col border-r border-base-200 bg-base-100 px-3 py-5">
           <NuxtLink to="/" class="px-2 text-sm font-bold tracking-tight">
-            <BriefcaseBusiness :size="35"/> Agent Job</NuxtLink>
+            <BriefcaseBusiness :size="35" /> Agent Job</NuxtLink
+          >
 
           <nav class="mt-6">
             <ul class="menu w-full gap-1 p-0">

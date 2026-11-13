@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { Offer } from '#shared/types'
+import type { Offer } from '#shared/types';
 
 const { data: offersData, pending: offersPending } = await useFetch<{ offers: Offer[] }>(
   '/api/offers',

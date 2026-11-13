@@ -4,14 +4,10 @@ import {
   createAnthropicChat,
   type AnthropicChatModel,
 } from '@tanstack/ai-anthropic';
-import {
-  OPENAI_CHAT_MODELS,
-  createOpenaiChat,
-  type OpenAIChatModel,
-} from '@tanstack/ai-openai';
+import { OPENAI_CHAT_MODELS, createOpenaiChat, type OpenAIChatModel } from '@tanstack/ai-openai';
 import { openaiCompatibleText } from '@tanstack/ai-openai/compatible';
 import { toModelId } from '#shared/models';
-import type { ModelOption, ProviderId } from '#shared/types'
+import type { ModelOption, ProviderId } from '#shared/types';
 
 const NON_CHAT_MODEL =
   /audio|realtime|search|computer-use|deep-research|codex|image|embedding|tts|transcri|moderation/i;

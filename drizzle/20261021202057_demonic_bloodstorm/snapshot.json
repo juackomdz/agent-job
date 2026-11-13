@@ -2,9 +2,7 @@
   "version": "7",
   "dialect": "sqlite",
   "id": "a268fdbb-ca3f-41d2-ae1a-d544f9b3c498",
-  "prevIds": [
-    "00000000-0000-0000-0000-000000000000"
-  ],
+  "prevIds": ["00000000-0000-0000-0000-000000000000"],
   "ddl": [
     {
       "name": "cv_profiles",
@@ -189,13 +187,9 @@
       "table": "offers"
     },
     {
-      "columns": [
-        "profile_id"
-      ],
+      "columns": ["profile_id"],
       "tableTo": "cv_profiles",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "nameExplicit": false,
@@ -204,28 +198,21 @@
       "table": "cv_skills"
     },
     {
-      "columns": [
-        "profile_id",
-        "skill"
-      ],
+      "columns": ["profile_id", "skill"],
       "nameExplicit": false,
       "name": "cv_skills_pk",
       "entityType": "pks",
       "table": "cv_skills"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "cv_profiles_pk",
       "table": "cv_profiles",
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "offers_pk",
       "table": "offers",
@@ -246,9 +233,7 @@
       "table": "cv_skills"
     },
     {
-      "columns": [
-        "url"
-      ],
+      "columns": ["url"],
       "nameExplicit": false,
       "name": "offers_url_unique",
       "entityType": "uniques",

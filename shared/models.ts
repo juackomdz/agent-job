@@ -1,4 +1,4 @@
-import type { ProviderId } from '#shared/types'
+import type { ProviderId } from '#shared/types';
 
 export const PROVIDER_LABELS: Record<ProviderId, string> = {
   openai: 'OpenAI',

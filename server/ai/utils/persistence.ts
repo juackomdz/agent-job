@@ -1,3 +1,3 @@
-import { memoryPersistence } from '@tanstack/ai-persistence'
+import { memoryPersistence } from '@tanstack/ai-persistence';
 
-export const persistence = memoryPersistence()
+export const persistence = memoryPersistence();

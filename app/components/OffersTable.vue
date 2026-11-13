@@ -34,7 +34,7 @@ const table = props.table;
               @click="header.column.getToggleSortingHandler()?.($event)"
             >
               <FlexRender :header="header" />
-              {{ {asc: '🔼', desc: '🔽'}[header.column.getIsSorted() as string] }}
+              {{ { asc: '🔼', desc: '🔽' }[header.column.getIsSorted() as string] }}
             </th>
           </tr>
         </thead>

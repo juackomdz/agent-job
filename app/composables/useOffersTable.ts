@@ -14,7 +14,6 @@ import type { Offer } from '#shared/types';
 export type OffersTableInstance = ReturnType<typeof useOffersTable>;
 
 export function useOffersTable(offers: { value: Offer[] }, items: number = 10) {
-
   const features = tableFeatures({
     columnSizingFeature,
     rowPaginationFeature,
@@ -51,7 +50,7 @@ export function useOffersTable(offers: { value: Offer[] }, items: number = 10) {
           'Abrir',
         ),
       size: 140,
-      enableSorting: false
+      enableSorting: false,
     },
     {
       accessorKey: 'match',

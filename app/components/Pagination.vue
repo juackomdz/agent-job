@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { OffersTableInstance } from '../composables/useOffersTable';
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from '@lucide/vue'
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from '@lucide/vue';
 
 const props = defineProps<{
   table: OffersTableInstance;
@@ -27,13 +27,13 @@ const table = props.table;
       @click="table.previousPage()"
       :disabled="!table.getCanPreviousPage()"
     >
-      <ChevronLeft :size="20"/>
+      <ChevronLeft :size="20" />
     </button>
     <button class="join-item btn" @click="table.nextPage()" :disabled="!table.getCanNextPage()">
-      <ChevronRight :size="20"/>
+      <ChevronRight :size="20" />
     </button>
     <button class="join-item btn" @click="table.lastPage()" :disabled="!table.getCanLastPage()">
-      <ChevronsRight :size="20"/>
+      <ChevronsRight :size="20" />
     </button>
   </div>
 </template>

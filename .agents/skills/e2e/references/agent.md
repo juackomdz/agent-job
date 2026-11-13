@@ -185,12 +185,14 @@ import { z } from 'zod';
 
 await agent.assert('the dashboard shows a trial badge'); // one look, one judgment
 
-await agent.waitFor('the export finished and a download link appeared', { // polls
+await agent.waitFor('the export finished and a download link appeared', {
+  // polls
   interval: 500,
   timeout: 120_000,
 });
 
-const data = await agent.extract('every todo title and how many remain', { // structured output
+const data = await agent.extract('every todo title and how many remain', {
+  // structured output
   schema: z.object({ titles: z.array(z.string()), remaining: z.number().int() }),
 });
 expect(data.titles).toContain('Buy milk');
@@ -269,7 +271,9 @@ masked pixels fail with `POLICY_DENIED`.
 
 ```ts
 // BAD: three goals in one instruction, one recording, no check between them.
-await agent.act('open the Pro plan, set the seats to {seats}, and check out', { params: { seats: 3 } });
+await agent.act('open the Pro plan, set the seats to {seats}, and check out', {
+  params: { seats: 3 },
+});
 
 // GOOD: three atomic goals, each pinned before the next.
 await agent.act('open the Pro plan');
@@ -315,12 +319,12 @@ selectors: the runner validates and authorizes every tool call first.
 
 ## Budgets and cost
 
-| Call | Model calls | Default timeout |
-| --- | ---: | --- |
-| `act` | up to `agents.<name>.maxModelCalls` (25) | the config `timeout`, 120 s |
-| `assert` | 2 | 30 s |
-| `extract` | 2 | 30 s |
-| `waitFor` | up to `agents.<name>.maxModelCalls` (25) | 30 s |
+| Call      |                              Model calls | Default timeout             |
+| --------- | ---------------------------------------: | --------------------------- |
+| `act`     | up to `agents.<name>.maxModelCalls` (25) | the config `timeout`, 120 s |
+| `assert`  |                                        2 | 30 s                        |
+| `extract` |                                        2 | 30 s                        |
+| `waitFor` | up to `agents.<name>.maxModelCalls` (25) | 30 s                        |
 
 - Slow model calls: raise the step or test `timeout` for `act`, the agent's
   `judgmentTimeout` for judgments, `actionTimeout` for slow UI.

@@ -36,7 +36,7 @@ prove each bug. Report confirmed bugs only, each with its failing test.
   fixtures or seed scripts and declare each as a credential (`bb-<slug>`).
   Explorers that share an account report each other's edits as bugs.
 - Start signed-in charters from a saved session: `e2e explore --session
-  <name>` runs the setup test that saves it and explores signed in (topic
+<name>` runs the setup test that saves it and explores signed in (topic
   `explore`). Each charter with its own account needs its own setup and
   session.
 - Put what the local app cannot do in the agent's `context`: integrations
@@ -74,13 +74,20 @@ const shared: E2EConfig = base;
 const context =
   'Sign in with the credential the goal names. The local app sends no email and has no AI key. Never start a paid run or connect an integration. ' +
   'Not bugs: a link that opens a new tab leaves this one unchanged; accessible text splits around inline links, so judge copy by the rendered screen when a screenshot is available and never report split text alone as broken copy; an infinite-scroll "Loading more" sentinel loads when scrolled into view; images lazy-load, so scroll and wait before calling one blank.';
-const persona = { model: gateway('openai/gpt-6-luna-fast'), maxSteps: 40, maxModelCalls: 40, context };
+const persona = {
+  model: gateway('openai/gpt-6-luna-fast'),
+  maxSteps: 40,
+  maxModelCalls: 40,
+  context,
+};
 
 export default {
   ...shared,
   // The project's tests, so a repro can use its setup tests' sessions, plus the repro tests from step 6.
   tests: [
-    ...[shared.tests ?? 'tests/**/*.e2e.ts'].flat().filter((glob) => !glob.startsWith('!tests/bugbash/')),
+    ...[shared.tests ?? 'tests/**/*.e2e.ts']
+      .flat()
+      .filter((glob) => !glob.startsWith('!tests/bugbash/')),
     'tests/bugbash/**/*.e2e.ts',
   ],
   // The app already runs: no command.
@@ -91,13 +98,24 @@ export default {
     ...shared.credentials,
     // The seed script's password, from the environment rather than the file.
     'bb-cart': { username: 'bb-cart@example.test', password: process.env.BUGBASH_PASSWORD ?? '' },
-    'bb-account': { username: 'bb-account@example.test', password: process.env.BUGBASH_PASSWORD ?? '' },
+    'bb-account': {
+      username: 'bb-account@example.test',
+      password: process.env.BUGBASH_PASSWORD ?? '',
+    },
   },
   // The postures from step 2 as personas: same model and budgets, a different stance; each charter picks one with --agent (step 3).
   agents: {
     default: persona,
-    skeptic: { ...persona, system: 'Distrust every number, date, count, and claim on screen; cross-check each against every other place it appears.' },
-    fuzzer: { ...persona, system: "At every input, run the goal's input matrix before anything else, judging each entry before the next. Never take the happy path." },
+    skeptic: {
+      ...persona,
+      system:
+        'Distrust every number, date, count, and claim on screen; cross-check each against every other place it appears.',
+    },
+    fuzzer: {
+      ...persona,
+      system:
+        "At every input, run the goal's input matrix before anything else, judging each entry before the next. Never take the happy path.",
+    },
   },
 } satisfies E2EConfig;
 ```
@@ -113,13 +131,13 @@ naming the start route and, when needed, the credential (`Sign in as
 credential bb-cart. Starting at /cart, ...`). Read the routes, navigation,
 and forms first; for a branch, `git diff --stat` against the base.
 
-| Posture | Charter shape |
-| --- | --- |
-| First-time user | `Starting at /signup, sign up and complete onboarding like a first-time user; report anything confusing, broken, or inconsistent` |
-| Numbers and copy | `Starting at /cart, change quantities and apply a coupon; check every price, total, and label against the rest of the page` |
-| Edge input | `Starting at /settings/profile, submit each field empty, too long, with unicode and with leading spaces; report validation that is missing or wrong` |
-| State | `Starting at /projects, create, rename, and delete a project, reloading and going back after each; report state that is lost or stale` |
-| Error paths | `Starting at /login, try a wrong password, an unknown account, and a locked account; report errors that are missing, misleading, or leak detail` |
+| Posture          | Charter shape                                                                                                                                        |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| First-time user  | `Starting at /signup, sign up and complete onboarding like a first-time user; report anything confusing, broken, or inconsistent`                    |
+| Numbers and copy | `Starting at /cart, change quantities and apply a coupon; check every price, total, and label against the rest of the page`                          |
+| Edge input       | `Starting at /settings/profile, submit each field empty, too long, with unicode and with leading spaces; report validation that is missing or wrong` |
+| State            | `Starting at /projects, create, rename, and delete a project, reloading and going back after each; report state that is lost or stale`               |
+| Error paths      | `Starting at /login, try a wrong password, an unknown account, and a locked account; report errors that are missing, misleading, or leak detail`     |
 
 Aim for five to ten charters, each with its own slug. Overlap is fine;
 duplicates merge in step 4. Give each posture its persona (config above),
@@ -175,13 +193,13 @@ A charter's video is not masked: check it for secrets before sharing (topic
 
 Sort every finding before writing any test. Read the source to sort them.
 
-| Bucket | Sign | Outcome |
-| --- | --- | --- |
-| Explorer artifact | A "dead" `target="_blank"` link whose destination opens when clicked with popup capture or navigated to directly, a broken sentence the screenshot renders whole, a "Loading more" sentinel nothing scrolled to, a lazy-loading image or embed | Rejected with the check that settled it; settle this bucket first. A new-tab link whose destination never opens stays a candidate |
-| Environment | Fails on a key, a service, or a limit only the local stack lacks (an email provider, an AI key, a billing plan) | Rejected, naming the variable or service; note separately when the app handles the failure badly in a way production users would see, such as showing the raw error |
-| Design | The code, its tests, or its copy say the behavior is intended | Rejected, citing where |
-| Fixture | The seed data lacks a field real records always have | Rejected, naming the field |
-| Candidate | None of the above | Verify it (step 6) |
+| Bucket            | Sign                                                                                                                                                                                                                                           | Outcome                                                                                                                                                             |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Explorer artifact | A "dead" `target="_blank"` link whose destination opens when clicked with popup capture or navigated to directly, a broken sentence the screenshot renders whole, a "Loading more" sentinel nothing scrolled to, a lazy-loading image or embed | Rejected with the check that settled it; settle this bucket first. A new-tab link whose destination never opens stays a candidate                                   |
+| Environment       | Fails on a key, a service, or a limit only the local stack lacks (an email provider, an AI key, a billing plan)                                                                                                                                | Rejected, naming the variable or service; note separately when the app handles the failure badly in a way production users would see, such as showing the raw error |
+| Design            | The code, its tests, or its copy say the behavior is intended                                                                                                                                                                                  | Rejected, citing where                                                                                                                                              |
+| Fixture           | The seed data lacks a field real records always have                                                                                                                                                                                           | Rejected, naming the field                                                                                                                                          |
+| Candidate         | None of the above                                                                                                                                                                                                                              | Verify it (step 6)                                                                                                                                                  |
 
 ## 6. Verify
 

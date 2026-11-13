@@ -30,16 +30,16 @@ trip. `npx e2e guide <topic>` prints the installed package's version of a
 reference; prefer it when it differs from this copy.
 The Rules and Feedback sections below still apply.
 
-| When you are | Topic | Read |
-| --- | --- | --- |
-| Adding e2e to a project, writing `e2e.config.ts`, starting the app from the config, signing in to a model, setting up mobile targets | `setup` | [references/setup.md](references/setup.md) |
-| Looking at the running app, checking a UI change, taking a screenshot or video, trying a locator, running a test line, or walking a flow while you write its test, over `e2e mcp` | `mcp` | [references/mcp.md](references/mcp.md) |
-| Writing or fixing a test: fixtures, locators, actions, matchers, sign-in sessions, the `browser` fixture, API-only tests | `writing-tests` | [references/writing-tests.md](references/writing-tests.md) |
-| Adding `agent.*` steps, picking a model, cutting cost, budgets, the replay cache | `agent` | [references/agent.md](references/agent.md) |
-| Running tests: CLI flags, CI, reporters, trace pages, `report.json` for scripts, exit codes | `running` | [references/running.md](references/running.md) |
-| Handling a failed run: error codes and their fixes, `--headed`, `--debug`, `--ai-trace` | `debugging` | [references/debugging.md](references/debugging.md) |
-| Exploring an app toward a goal without a test file: `e2e explore`, its budgets and verdict | `explore` | [references/explore.md](references/explore.md) |
-| Asked to bug bash, QA, or hunt for bugs across an app or a branch | `bug-bash` | [references/bug-bash.md](references/bug-bash.md) |
+| When you are                                                                                                                                                                      | Topic           | Read                                                       |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | ---------------------------------------------------------- |
+| Adding e2e to a project, writing `e2e.config.ts`, starting the app from the config, signing in to a model, setting up mobile targets                                              | `setup`         | [references/setup.md](references/setup.md)                 |
+| Looking at the running app, checking a UI change, taking a screenshot or video, trying a locator, running a test line, or walking a flow while you write its test, over `e2e mcp` | `mcp`           | [references/mcp.md](references/mcp.md)                     |
+| Writing or fixing a test: fixtures, locators, actions, matchers, sign-in sessions, the `browser` fixture, API-only tests                                                          | `writing-tests` | [references/writing-tests.md](references/writing-tests.md) |
+| Adding `agent.*` steps, picking a model, cutting cost, budgets, the replay cache                                                                                                  | `agent`         | [references/agent.md](references/agent.md)                 |
+| Running tests: CLI flags, CI, reporters, trace pages, `report.json` for scripts, exit codes                                                                                       | `running`       | [references/running.md](references/running.md)             |
+| Handling a failed run: error codes and their fixes, `--headed`, `--debug`, `--ai-trace`                                                                                           | `debugging`     | [references/debugging.md](references/debugging.md)         |
+| Exploring an app toward a goal without a test file: `e2e explore`, its budgets and verdict                                                                                        | `explore`       | [references/explore.md](references/explore.md)             |
+| Asked to bug bash, QA, or hunt for bugs across an app or a branch                                                                                                                 | `bug-bash`      | [references/bug-bash.md](references/bug-bash.md)           |
 
 For anything the references do not cover, the full documentation ships in
 the `docs/` directory of the installed `e2e` package
@@ -239,7 +239,7 @@ lines you changed:
   in params. A goal is atomic: one outcome that one check confirms. Two
   outcomes worth checking are two goals, so split them into two `act` calls
   (topic `agent`). Bad: `'add a todo and mark it done'`. Good: `'add a
-  todo'`, check, then `'mark the todo as done'`, check. Judge meaning, not
+todo'`, check, then `'mark the todo as done'`, check. Judge meaning, not
   phrasing: `toContain('Pro')`, not an exact sentence a model produced.
 - Check each agent goal's outcome. A passing `act` with a recorded check can
   be cached and replayed without model calls (topic `agent`).

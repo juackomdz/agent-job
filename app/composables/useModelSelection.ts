@@ -1,6 +1,6 @@
 import { computed } from 'vue';
 import { PROVIDER_LABELS } from '#shared/models';
-import type { ModelOption, ProviderId, ModelsResponse } from '#shared/types'
+import type { ModelOption, ProviderId, ModelsResponse } from '#shared/types';
 
 export function useModelSelection() {
   const { data, pending } = useFetch<ModelsResponse>('/api/models', { key: 'models' });

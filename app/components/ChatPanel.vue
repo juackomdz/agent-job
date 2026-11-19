@@ -4,7 +4,7 @@ import { fetchServerSentEvents, useChat, type UIMessage } from '@tanstack/ai-vue
 import { TextPart } from '@tanstack/ai-vue/ui';
 import { Square } from '@lucide/vue';
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
     compact?: boolean;
     placeholder?: string;
@@ -41,6 +41,18 @@ function textOf(message: UIMessage): string {
   return out;
 }
 
+const visibleMessages = computed(() =>
+  messages.value.filter(
+    (m) => m.role === 'user' || (m.role === 'assistant' && textOf(m).trim().length > 0),
+  ),
+);
+
+const showTyping = computed(() => {
+  if (!isLoading.value) return false;
+  const last = messages.value[messages.value.length - 1];
+  return !last || last.role !== 'assistant' || textOf(last).trim().length === 0;
+});
+
 watch(messages, async () => {
   await nextTick();
   scrollRef.value?.scrollTo({ top: scrollRef.value.scrollHeight });
@@ -60,14 +72,14 @@ watch(messages, async () => {
         class="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4"
       >
         <p
-          v-if="!messages.length"
+          v-if="!visibleMessages.length && !showTyping"
           class="mx-auto max-w-md text-center text-sm text-base-content/60"
         >
           Pide ofertas o consulta tu CV guardado.
         </p>
 
         <div
-          v-for="m in messages"
+          v-for="m in visibleMessages"
           :key="m.id"
           class="chat"
           :class="m.role === 'user' ? 'chat-end' : 'chat-start'"
@@ -77,8 +89,16 @@ watch(messages, async () => {
             class="chat-bubble max-w-[85%] text-sm whitespace-pre-wrap"
             :class="m.role === 'user' ? 'chat-bubble-primary' : 'bg-base-200 text-base-content'"
           >
-           <!-- {{ textOf(m) || '…' }} -->
-             <TextPart :content="textOf(m) || '…'" :role="m.role === 'user' ? 'user' : 'assistant'" />
+            <TextPart :content="textOf(m)" :role="m.role === 'user' ? 'user' : 'assistant'" />
+          </div>
+        </div>
+
+        <div v-if="showTyping" class="chat chat-start" data-testid="msg-typing">
+          <div class="chat-bubble bg-base-200 text-base-content">
+            <span
+              class="loading loading-dots loading-sm"
+              aria-label="El asistente está respondiendo"
+            />
           </div>
         </div>
       </div>

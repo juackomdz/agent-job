@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue';
 import { fetchServerSentEvents, useChat, type UIMessage } from '@tanstack/ai-vue';
+import { TextPart } from '@tanstack/ai-vue/ui';
 import { Square } from '@lucide/vue';
 
 const props = withDefaults(
@@ -76,7 +77,8 @@ watch(messages, async () => {
             class="chat-bubble max-w-[85%] text-sm whitespace-pre-wrap"
             :class="m.role === 'user' ? 'chat-bubble-primary' : 'bg-base-200 text-base-content'"
           >
-            {{ textOf(m) || '…' }}
+           <!-- {{ textOf(m) || '…' }} -->
+             <TextPart :content="textOf(m) || '…'" :role="m.role === 'user' ? 'user' : 'assistant'" />
           </div>
         </div>
       </div>

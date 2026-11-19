@@ -2,12 +2,22 @@
 import { FlexRender } from '@tanstack/vue-table';
 import type { Offer } from '#shared/types';
 import type { OffersTableInstance } from '../composables/useOffersTable';
+import { ArrowUpFromDot, ArrowDownToDot, ArrowUpDown } from '@lucide/vue';
 
 const props = defineProps<{
   offers: Offer[];
   loading?: boolean;
   table: OffersTableInstance;
 }>();
+
+const sortingIcons = {
+  asc: ArrowUpFromDot,
+  desc: ArrowDownToDot
+} as const
+
+const sortIcon = (direction: false | 'asc' | 'desc') => {
+  return direction ? sortingIcons[direction] : ArrowUpDown
+}
 
 const table = props.table;
 </script>
@@ -34,7 +44,12 @@ const table = props.table;
               @click="header.column.getToggleSortingHandler()?.($event)"
             >
               <FlexRender :header="header" />
-              {{ { asc: '🔼', desc: '🔽' }[header.column.getIsSorted() as string] }}
+              <component
+              :is="sortIcon(header.column.getIsSorted())"
+              v-if="header.column.getCanSort()"
+              :size="12"
+              :class="header.column.getIsSorted() ? '' : 'opacity-50'"
+              />
             </th>
           </tr>
         </thead>

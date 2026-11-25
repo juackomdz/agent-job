@@ -87,7 +87,7 @@ watch(messages, async () => {
         >
           <div
             class="chat-bubble max-w-[85%] text-sm whitespace-pre-wrap"
-            :class="m.role === 'user' ? 'chat-bubble-primary' : 'bg-base-200 text-base-content'"
+            :class="m.role === 'user' ? 'chat-bubble' : 'bg-base-200 text-base-content'"
           >
             <TextPart :content="textOf(m)" :role="m.role === 'user' ? 'user' : 'assistant'" />
           </div>
@@ -116,10 +116,10 @@ watch(messages, async () => {
             :disabled="isLoading"
           />
           <div v-if="!isLoading">
-            <button type="submit" class="btn btn-primary" :disabled="!canSend">Enviar</button>
+            <button type="submit" class="btn btn-secondary" :disabled="!canSend">Enviar</button>
           </div>
           <div v-else>
-            <button type="button" class="btn btn-primary" aria-label="Detener" @click="stop()">
+            <button type="button" class="btn btn-secondary" aria-label="Detener" @click="stop()">
               <Square />
             </button>
           </div>

@@ -45,7 +45,7 @@ export function useOffersTable(offers: { value: Offer[] }, items: number = 10) {
             href: info.getValue<string>(),
             target: '_blank',
             rel: 'noopener noreferrer',
-            class: 'link link-primary',
+            class: 'link link-secondary',
           },
           'Abrir',
         ),

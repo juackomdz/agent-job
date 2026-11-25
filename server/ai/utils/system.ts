@@ -13,28 +13,14 @@ Keywords de ejemplo: skills del array, nombre del rol (Full Stack, Backend, Fron
 Usa solo estas herramientas. No llames herramientas de Apify que no estén en esta lista (docs, tareas, schedules, builds, key-value stores, API de Apify, report-problem).
 
 ### Búsqueda y extracción (MCP de Apify)
-1. apify--web-search — busca en Google y devuelve título, URL, snippet, fecha y posición.
-   - query: 2 a 5 keywords; combina español e inglés (ej. "desarrollador full stack chile", "backend golang santiago").
-   - countryCode: "CL"; languageCode: "es". Para remoto internacional usa languageCode: "en" y omite allowedDomains.
-   - maxResults: 8 a 10.
-   - provider: "google"; si falla o no hay resultados, reintenta una vez con "duckduckgo".
-   - dateFrom: opcional. Si el entorno te da la fecha actual, usa la fecha de hace 30 días en formato YYYY-MM-DD; si no, omítelo y no inventes una fecha.
-   - allowedDomains (máximo 10, incluye subdominios): ["getonbrd.com", "computrabajo.cl", "indeed.cl", "linkedin.com", "laborum.cl", "chiletrabajos.cl", "empleos.cl", "trabajando.cl"]. Úsalo para diversificar o cuando el usuario lo pida; si la búsqueda queda vacía, prueba sin filtro.
-   - No inventes parámetros: usa solo los que expone la herramienta.
-2. apify--web-fetch — descarga una URL y devuelve su contenido en Markdown.
-   - url: la URL exacta de la oferta.
-   - formats: ["markdown"].
-   - wait: 3000 solo si la página carga contenido por JavaScript (LinkedIn, portales dinámicos); si no, omítelo.
-   - Una URL por llamada. Puedes lanzar varios web-fetch en paralelo en el mismo turno, pero máximo 6 por búsqueda.
-   - Si devuelve error, contenido vacío o la página no es una oferta, descártala. No reintentes la misma URL más de una vez.
-3. Actores especializados (solo si web-search/web-fetch no bastan):
-   - search-actors: busca un Actor de Apify para un portal (ej. "Computrabajo", "GetOnBoard", "LinkedIn jobs").
+1. Actores especializados:
+   - search-actors: busca un Actor de Apify para un portal (ej. "Computrabajo", "GetOnBoard", "LinkedIn jobs", "Publicaciones de LinkedIn).
    - fetch-actor-details: revisa el input schema y el precio antes de ejecutar.
    - call-actor: ejecuta el Actor con actor, input y callOptions.maxItems (10 a 20). waitSecs: 40.
    - get-actor-run: consulta el estado si el run no terminó.
    - get-dataset-items: lee los resultados con datasetId cuando el run esté listo.
    - No ejecutes más de un Actor especializado por portal ni repitas un run fallido.
-4. save_job_tool — guarda ofertas en la base de datos, solo después de extraer contenido real.
+2. save_job_tool — guarda ofertas en la base de datos, solo después de extraer contenido real.
    - 1 a 20 ofertas por llamada, en un solo lote.
    - title, company: máximo 100 caracteres.
    - description: máximo 2000 caracteres, resumen real extraído de la página (nunca inventado).

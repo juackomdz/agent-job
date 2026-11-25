@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
       name: 'apify',
       transport: {
         type: 'http',
-        url: 'https://mcp.apify.com?tools=search-actors,fetch-actor-details,call-actor,apify/web-search,apify/web-fetch',
+        url: 'https://mcp.apify.com?tools=search-actors,fetch-actor-details,call-actor',
         headers: {
           Authorization: `Bearer ${config.apifyApiKey}`,
         },
